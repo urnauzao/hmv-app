@@ -5,41 +5,61 @@ import { Button } from 'primereact/button';
 import { LoginService } from './../../service/LoginService';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory, useLocation } from 'react-router-dom';
 
 
-const LoginPage = () => {
-    const [loading, setLoading] = useState(false);
+const LoginPage = ({ props }) => {
+    // const [loading, setLoading] = useState(false);
     const [usuario, setUsuario] = useState();
     const [senha, setSenha] = useState();
-    // const [redirectToReferrer, setRedirectToReferrer] = React.useState(LoginService.isLoged);
-    const [redirectToReferrer, setRedirectToReferrer] = React.useState(LoginService.isLoged()||false);
-    // const history = useHistory();
-    const onLoadingClick = () => {
-        setLoading(true);
-    }
+    // const [redirectToReferrer, setRedirectToReferrer] = React.useState(LoginService.isLoged()||false);
+    let history = useHistory();
+    let location = useLocation();
+    let auth = props();
+    // useAuth();
 
-    const login = async () => {
-        setLoading(true);
-        const loginService = new LoginService();
-        const result = await loginService.postLogin(usuario, senha, navigator.userAgent)
-        if (result.success) {
-            console.log("setandosucesso", LoginService.isLoged())
-            setRedirectToReferrer(true);
-        } else {
-            toast.error(result.message)
-            setLoading(false);
-        }
-    }
+    let { from } = location.state || { from: { pathname: "/" } };
+    let login = () => {
+        // auth.signin((usuario, senha, device_name = "?") => {
+        //     history.replace(from);
+        // });
+        auth.signin(usuario, senha, navigator.userAgent);
+    };
 
-    useEffect(() => {
-        console.log('loginService', LoginService.isLoged());
-        return () => {
-            if (redirectToReferrer === true) {
-                return <Redirect to="/" />;
-            }
-        };
-    }, [redirectToReferrer]);
+    // return (
+    //     <div>
+    //     <p>You must log in to view the page at {from.pathname}</p>
+    //     <button onClick={login}>Log in</button>
+    //     </div>
+    // );
+
+
+
+    // const onLoadingClick = () => {
+    //     setLoading(true);
+    // }
+
+    // const login = async () => {
+    //     setLoading(true);
+    //     const loginService = new LoginService();
+    //     const result = await loginService.postLogin(usuario, senha, navigator.userAgent)
+    //     if (result.success) {
+    //         console.log("setandosucesso", LoginService.isLoged())
+    //         setRedirectToReferrer(true);
+    //     } else {
+    //         toast.error(result.message)
+    //         setLoading(false);
+    //     }
+    // }
+
+    // useEffect(() => {
+    //     console.log('loginService', LoginService.isLoged());
+    //     return () => {
+    //         if (redirectToReferrer === true) {
+    //             return <Redirect to="/" />;
+    //         }
+    //     };
+    // }, [redirectToReferrer]);
    
 
     return (
@@ -75,7 +95,9 @@ const LoginPage = () => {
                     </div>
                     <div className="fluid mt-3">
                         <div className="flex flex-row-reverse flex-wrap card-container">
-                            <Button label="Acessar" icon="pi pi-check" loading={loading} onClick={login} />
+                            <Button label="Acessar" icon="pi pi-check"
+                                // loading={loading}
+                            onClick={login} />
                             <p className="align-self-center px-2">Esqueci a senha</p>
                         </div>
                     </div>
@@ -111,7 +133,10 @@ const LoginPage = () => {
                     </div>
                     <div className="fluid mt-3">
                         <div className="flex flex-row-reverse flex-wrap card-container">
-                            <Button label="Criar Usuário" icon="pi pi-check" loading={loading} onClick={onLoadingClick} />
+                            <Button label="Criar Usuário" icon="pi pi-check"
+                                // loading={loading}
+                                // onClick={onLoadingClick}
+                            />
                         </div>
                     </div>
                 </div>

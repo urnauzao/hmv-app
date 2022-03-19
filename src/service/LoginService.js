@@ -1,11 +1,11 @@
 import { RequestService } from './RequestService';
 import ApiRoutes from './../ApiRoutes';
-import { StorageService } from './StorageService';
+import {StorageService} from './StorageService';
     
-export class LoginService {
+class LoginService {
     reqService = new RequestService();
 
-    async postLogin(email, password, device_name = "unknown") { 
+    async postLogin(email, password, device_name = "unknown")  { 
         console.log(ApiRoutes)
         const url = ApiRoutes['API_URL'] + ApiRoutes['LOGIN']['POST_LOGIN'];
         return this.reqService.post(url, {
@@ -15,27 +15,32 @@ export class LoginService {
         })
             .then(res => res.data)
             .then(result => { 
-                console.log('resultado', result);
+                // console.log('resultado', result);
                 this.setLogin(result);
-                return { success: true };
             })
             .catch(
                 (err) => {
-                    return { success: false, ...err.response.data};
+                    console.log({ success: false, ...err.response.data});
                 }
         );
     }
 
     setLogin(token) { 
-        (new StorageService()).add('api_token', token);
-    }
-
-    static isLoged() { 
-        return StorageService.get('api_token') ? true : false;
+        StorageService.add('api_token', token);
     }
 
     logout() {
-        (new StorageService()).remove('api_token');
+        StorageService.remove('api_token');
     }
 
 }
+
+const isLoged = () => {
+    return StorageService.get('api_token') ? true : false;
+}
+
+const getToken = () => {
+    return StorageService.get('api_token');
+}
+
+export { isLoged, getToken, LoginService };

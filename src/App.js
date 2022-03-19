@@ -1,38 +1,13 @@
 import React, { useState, useEffect, useRef, createContext, useContext } from 'react';
 import classNames from 'classnames';
-import { Route, useLocation, BrowserRouter as Router, Switch, Redirect, Link } from 'react-router-dom';
+import { Route, useLocation, BrowserRouter as Router, Switch, Redirect, Link, useHistory } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 
 import { AppTopbar } from './AppTopbar';
 import { AppFooter } from './AppFooter';
 import { AppMenu } from './AppMenu';
 import { AppConfig } from './AppConfig';
-
-import Dashboard from './components/Dashboard';
-import ButtonDemo from './components/ButtonDemo';
-import ChartDemo from './components/ChartDemo';
-import Documentation from './components/Documentation';
-import FileDemo from './components/FileDemo';
-import FloatLabelDemo from './components/FloatLabelDemo';
-import FormLayoutDemo from './components/FormLayoutDemo';
-import InputDemo from './components/InputDemo';
-import ListDemo from './components/ListDemo';
-import MenuDemo from './components/MenuDemo';
-import MessagesDemo from './components/MessagesDemo';
-import MiscDemo from './components/MiscDemo';
-import OverlayDemo from './components/OverlayDemo';
-import MediaDemo from './components/MediaDemo';
-import PanelDemo from './components/PanelDemo';
-import TableDemo from './components/TableDemo';
-import TreeDemo from './components/TreeDemo';
-import InvalidStateDemo from './components/InvalidStateDemo';
-import BlocksDemo from './components/BlocksDemo';
-import IconsDemo from './components/IconsDemo';
-
-import Crud from './pages/Crud';
-import EmptyPage from './pages/EmptyPage';
-import HomePage from './pages/app/HomePage';
-import TimelineDemo from './pages/TimelineDemo';
+import  HomePage from './pages/app/HomePage'; 
 
 import PrimeReact from 'primereact/api';
 import { Tooltip } from 'primereact/tooltip';
@@ -46,8 +21,9 @@ import './assets/demo/Demos.scss';
 import './assets/layout/layout.scss';
 import './App.scss';
 import LoginPage from './pages/app/LoginPage';
-import { LoginService } from './service/LoginService';
+import { isLoged, LoginService } from './service/LoginService';
 
+const authContext = createContext();
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState('static');
@@ -287,125 +263,179 @@ const App = () => {
         'layout-theme-light': layoutColorMode === 'light'
     });
 
-    const PrivateRoute = ({ children, ...rest }) => {
-        console.warn("PrivateRoute");
-        return (
-            <Route
-                {...rest}
-                render={() => {
-                    // return LoginService.isLoged === true ? (
-                    return LoginService.isLoged() === true ? (
-                        children
-                    ) : (
-                        <Redirect to="/login" />
-                    );
-                }}
-            />
-        );
-    }
+    // const PrivateRoute = ({ children, ...rest }) => {
+    //     console.warn("PrivateRoute");
+    //     return (
+    //         <Route
+    //             {...rest}
+    //             render={() => {
+    //                 // return LoginService.isLoged === true ? (
+    //                 return LoginService.isLoged() === true ? (
+    //                     children
+    //                 ) : (
+    //                     <Redirect to="/login" />
+    //                 );
+    //             }}
+    //         />
+    //     );
+    // }
 
-    const authContext = createContext();
 
-    const ProvideAuth = ({ children }) =>{
-        const auth = useProvideAuth();
-        return (
-            <authContext.Provider value={auth}>
-                {children}
-            </authContext.Provider>
-        );
-    }
-
-    const useAuth = () =>{
-        return useContext(authContext);
-    }
-
-    function useProvideAuth() {
-        const [user, setUser] = useState(null);
-
-        const signin = cb => {
-            return fakeAuth.signin(() => {
-                setUser("user");
-                cb();
-            });
-        };
-
-        const signout = cb => {
-            return fakeAuth.signout(() => {
-                setUser(null);
-                cb();
-            });
-        };
-
-        return {
-            user,
-            signin,
-            signout
-        };
-    }
 
     /** https://v5.reactrouter.com/web/example/auth-workflow */
+    // https://www.digitalocean.com/community/tutorials/how-to-add-login-authentication-to-react-applications
 
     return (
-        <div className={wrapperClass} onClick={onWrapperClick}>
-            <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
+        <ProvideAuth>
+            <div className={wrapperClass} onClick={onWrapperClick}>
+                <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
 
-            <AppTopbar onToggleMenuClick={onToggleMenuClick} layoutColorMode={layoutColorMode}
-                mobileTopbarMenuActive={mobileTopbarMenuActive} onMobileTopbarMenuClick={onMobileTopbarMenuClick} onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick} />
+                <AppTopbar onToggleMenuClick={onToggleMenuClick} layoutColorMode={layoutColorMode}
+                    mobileTopbarMenuActive={mobileTopbarMenuActive} onMobileTopbarMenuClick={onMobileTopbarMenuClick} onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick} />
 
-            <div className="layout-sidebar" onClick={onSidebarClick}>
-                <AppMenu model={menu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />
-            </div>
-
-            <div className="layout-main-container">
-                <div className="layout-main">
-                    {/* <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} />
-                    <Route path="/formlayout" component={FormLayoutDemo} />
-                    <Route path="/input" component={InputDemo} />
-                    <Route path="/floatlabel" component={FloatLabelDemo} />
-                    <Route path="/invalidstate" component={InvalidStateDemo} />
-                    <Route path="/button" component={ButtonDemo} />
-                    <Route path="/table" component={TableDemo} />
-                    <Route path="/list" component={ListDemo} />
-                    <Route path="/tree" component={TreeDemo} />
-                    <Route path="/panel" component={PanelDemo} />
-                    <Route path="/overlay" component={OverlayDemo} />
-                    <Route path="/media" component={MediaDemo} />
-                    <Route path="/menu" component={MenuDemo} />
-                    <Route path="/messages" component={MessagesDemo} />
-                    <Route path="/blocks" component={BlocksDemo} />
-                    <Route path="/icons" component={IconsDemo} />
-                    <Route path="/file" component={FileDemo} />
-                    <Route path="/chart" render={() => <ChartDemo colorMode={layoutColorMode} location={location} />} />
-                    <Route path="/misc" component={MiscDemo} />
-                    <Route path="/timeline" component={TimelineDemo} />
-                    <Route path="/crud" component={Crud} />
-                    <Route path="/empty" component={EmptyPage} />
-                    <Route path="/documentation" component={Documentation} /> */}
-                    {/* <Route path="/" exact component={HomePage} /> */}
-                    <Router>
-                        <Switch>
-                            <Link to="/login" component={LoginPage}/>  
-                            <PrivateRoute path='/'>
-                                <HomePage/>
-                            </PrivateRoute>
-                        </Switch>
-                    </Router>
-                    {/* <Route path="/home" component={HomePage} /> */}
+                <div className="layout-sidebar" onClick={onSidebarClick}>
+                    <AppMenu model={menu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />
                 </div>
 
-                <AppFooter layoutColorMode={layoutColorMode} />
+                <div className="layout-main-container">
+                    <div className="layout-main">
+                                          
+                        <Router>
+                            <Switch>
+                                <Route path="/login">
+                                    <LoginPage props={useAuth} />
+                                </Route>
+                                <PrivateRoute exact path='/'>
+                                    <HomePage/>
+                                </PrivateRoute>
+                                <PrivateRoute path='/teste'>
+                                    <HomePage />
+                                </PrivateRoute>
+                            </Switch>
+                        </Router>
+                        
+                        {/* <Route path="/home" component={HomePage} /> */}
+                    </div>
+
+                    <AppFooter layoutColorMode={layoutColorMode} />
+                </div>
+
+                <AppConfig rippleEffect={ripple} onRippleEffect={onRipple} inputStyle={inputStyle} onInputStyleChange={onInputStyleChange}
+                    layoutMode={layoutMode} onLayoutModeChange={onLayoutModeChange} layoutColorMode={layoutColorMode} onColorModeChange={onColorModeChange} />
+
+                <CSSTransition classNames="layout-mask" timeout={{ enter: 200, exit: 200 }} in={mobileMenuActive} unmountOnExit>
+                    <div className="layout-mask p-component-overlay"></div>
+                </CSSTransition>
+
             </div>
-
-            <AppConfig rippleEffect={ripple} onRippleEffect={onRipple} inputStyle={inputStyle} onInputStyleChange={onInputStyleChange}
-                layoutMode={layoutMode} onLayoutModeChange={onLayoutModeChange} layoutColorMode={layoutColorMode} onColorModeChange={onColorModeChange} />
-
-            <CSSTransition classNames="layout-mask" timeout={{ enter: 200, exit: 200 }} in={mobileMenuActive} unmountOnExit>
-                <div className="layout-mask p-component-overlay"></div>
-            </CSSTransition>
-
-        </div>
+        </ProvideAuth >
     );
 
 }
 
 export default App;
+
+
+const fakeAuth = {
+    isAuthenticated: false,
+    signin(cb) {
+        fakeAuth.isAuthenticated = true;
+        setTimeout(cb, 100); // fake async
+    },
+    signout(cb) {
+        fakeAuth.isAuthenticated = false;
+        setTimeout(cb, 100);
+    }
+};
+
+const ProvideAuth = ({ children }) => {
+    const auth = useProvideAuth();
+    return (
+        <authContext.Provider value={auth}>
+            {children}
+        </authContext.Provider>
+    );
+}
+
+const useAuth = () => {
+    return useContext(authContext);
+}
+
+const useProvideAuth = () => {
+    const [user, setUser] = useState(isLoged());
+    const [token, setToken] = useState(isLoged());
+    let history = useHistory();
+    console.log("useProvideAuth");
+    const signin = async (email, senha, device_name, cb) => {
+        let loginService = new LoginService();
+        await loginService.postLogin(email, senha, device_name, setUser);
+        if (isLoged()) {
+            setUser({...{ email }, ...{ senha }, ...{ device_name }});
+
+            console.log('está logado', user);
+            history.replace({ from: { pathname: "/teste" } });
+        }
+    };
+    // const signin = cb => {
+    //     return fakeAuth.signin(() => {
+    //         setUser("user");
+    //         cb();
+    //     });
+    // };
+
+    const signout = cb => {
+        return fakeAuth.signout(() => {
+            setUser(null);
+            cb();
+        });
+    };
+
+    return {
+        user,
+        signin,
+        signout
+    };
+}
+
+// A wrapper for <Route> that redirects to the login, screen if you're not yet authenticated.
+function PrivateRoute({ children, ...rest }) {
+    let auth = useAuth();
+    return (
+        <Route
+            {...rest}
+            render={({ location }) =>
+                auth.user ? (
+                    children
+                ) : (
+                    <Redirect
+                        to={{
+                            pathname: "/login",
+                            state: { from: location }
+                        }}
+                    />
+                )
+            }
+        />
+    );
+}
+
+
+// function ToLoginPage() {
+//     let history = useHistory();
+//     let location = useLocation();
+//     let auth = useAuth();
+
+//     let { from } = location.state || { from: { pathname: "/" } };
+//     let login = () => {
+//         auth.signin(() => {
+//             history.replace(from);
+//         });
+//     };
+
+//     return (
+//         <div>
+//             <p>You must log in to view the page at {from.pathname}</p>
+//             <button onClick={login}>Log in</button>
+//         </div>
+//     );
+// }

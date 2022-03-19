@@ -1,18 +1,18 @@
-export class StorageService {
+export const StorageService = {
     
-    add = (key, value) => { 
+    add : (key, value) => { 
         localStorage.setItem(key, value);
-    }
+    },
 
-    remove = (key) => { 
+    remove : (key) => { 
         localStorage.removeItem(key);
-    }
+    },
 
-    static get = (key) => {
-        localStorage.getItem(key);
-    }
+    get : (key) => {
+        return localStorage.getItem(key);
+    },
 
-    clear = () => {
+    clear : () => {
         localStorage.clear();
     }
 }
