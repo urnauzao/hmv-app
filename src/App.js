@@ -268,8 +268,14 @@ const App = () => {
             <div className={wrapperClass} onClick={onWrapperClick}>
                 <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
 
-                <AppTopbar onToggleMenuClick={onToggleMenuClick} layoutColorMode={layoutColorMode}
-                    mobileTopbarMenuActive={mobileTopbarMenuActive} onMobileTopbarMenuClick={onMobileTopbarMenuClick} onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick} />
+                <AppTopbar
+                    onToggleMenuClick={onToggleMenuClick}
+                    layoutColorMode={layoutColorMode}
+                    mobileTopbarMenuActive={mobileTopbarMenuActive}
+                    onMobileTopbarMenuClick={onMobileTopbarMenuClick}
+                    onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick}
+                    auth={useAuth}
+                />
 
                 <div className="layout-sidebar" onClick={onSidebarClick}>
                     <AppMenu model={menu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />
@@ -283,7 +289,7 @@ const App = () => {
                                 <Route path="/login">
                                     <LoginPage props={useAuth} />
                                 </Route>
-                                <PrivateRoute exact path='/'>
+                                <PrivateRoute path='/'>
                                     <HomePage/>
                                 </PrivateRoute>
                                 <PrivateRoute path='/teste'>
@@ -335,17 +341,19 @@ const useProvideAuth = () => {
     const signin = async (email, senha, device_name, cb) => {
         let loginService = new LoginService();
         await loginService.postLogin(email, senha, device_name);
-        if (isLoged()) {
+        if (fnIsLoged()) {
             setIsLoged(true);
-            console.log('está logado', user);
-            history.replace({ from: { pathname: "/teste" } });
+            console.log('está logado', isLoged);
+            history.replace({ from: { pathname: "/" } });
         }
     };
 
-    const signout = cb => {
+    const signout = () => {
+        console.log('saindo');
         let loginService = new LoginService();
         loginService.logout();
         setIsLoged(false);
+        history.replace({ from: { pathname: "/login" } });
     };
 
     return {

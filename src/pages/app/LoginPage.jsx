@@ -9,58 +9,19 @@ import { Redirect, useHistory, useLocation } from 'react-router-dom';
 
 
 const LoginPage = ({ props }) => {
-    // const [loading, setLoading] = useState(false);
     const [usuario, setUsuario] = useState();
     const [senha, setSenha] = useState();
-    // const [redirectToReferrer, setRedirectToReferrer] = React.useState(LoginService.isLoged()||false);
-    let history = useHistory();
-    let location = useLocation();
-    let auth = props();
-    // useAuth();
+    const auth = props();
+    const [isLoged, setIsLoged] = useState(auth.isLoged);
 
-    let { from } = location.state || { from: { pathname: "/" } };
-    let login = () => {
-        // auth.signin((usuario, senha, device_name = "?") => {
-        //     history.replace(from);
-        // });
+    const login = () => {
         auth.signin(usuario, senha, navigator.userAgent);
     };
 
-    // return (
-    //     <div>
-    //     <p>You must log in to view the page at {from.pathname}</p>
-    //     <button onClick={login}>Log in</button>
-    //     </div>
-    // );
-
-
-
-    // const onLoadingClick = () => {
-    //     setLoading(true);
-    // }
-
-    // const login = async () => {
-    //     setLoading(true);
-    //     const loginService = new LoginService();
-    //     const result = await loginService.postLogin(usuario, senha, navigator.userAgent)
-    //     if (result.success) {
-    //         console.log("setandosucesso", LoginService.isLoged())
-    //         setRedirectToReferrer(true);
-    //     } else {
-    //         toast.error(result.message)
-    //         setLoading(false);
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     console.log('loginService', LoginService.isLoged());
-    //     return () => {
-    //         if (redirectToReferrer === true) {
-    //             return <Redirect to="/" />;
-    //         }
-    //     };
-    // }, [redirectToReferrer]);
-   
+    if (isLoged === true) {
+        console.log('redirecionou')
+        return <Redirect to="/" />;
+    }
 
     return (
         <div className="grid">
@@ -145,9 +106,8 @@ const LoginPage = ({ props }) => {
     );
 }
 
-// const comparisonFn = function (prevProps, nextProps) {
-//     return prevProps.location.pathname === nextProps.location.pathname;
-// };
+const comparisonFn = function (prevProps, nextProps) {
+    return prevProps.location.pathname === nextProps.location.pathname;
+};
 
-// export default React.memo(LoginPage, comparisonFn);
-export default LoginPage;
+export default React.memo(LoginPage, comparisonFn);

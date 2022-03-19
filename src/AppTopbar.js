@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 
 export const AppTopbar = (props) => {
-
+    const auth = props.auth();
     return (
         <div className="layout-topbar">
             <Link to="/" className="layout-topbar-logo">
@@ -36,6 +36,12 @@ export const AppTopbar = (props) => {
                         <button className="p-link layout-topbar-button" onClick={props.onMobileSubTopbarMenuClick}>
                             <i className="pi pi-user"/>
                             <span>Profile</span>
+                        </button>
+                    </li>
+                    <li>
+                    <button className="p-link layout-topbar-button" onClick={auth.signout}>
+                            <i className="pi pi-sign-out"/>
+                            <span>Sair</span>
                         </button>
                     </li>
                 </ul>

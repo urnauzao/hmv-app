@@ -122,3 +122,4 @@ const comparisonFn = function (prevProps, nextProps) {
 };
 
 export default React.memo(HomePage, comparisonFn);
+// export default React.memo(HomePage);
