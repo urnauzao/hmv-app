@@ -21,7 +21,8 @@ import './assets/demo/Demos.scss';
 import './assets/layout/layout.scss';
 import './App.scss';
 import LoginPage from './pages/app/LoginPage';
-import { getToken, getUsersMe, isLoged as fnIsLoged, LoginService } from './service/LoginService';
+import { getToken, getUserPerfilSelected, getUsersMe, isLoged as fnIsLoged, LoginService } from './service/LoginService';
+import HabitoSaudePage from './pages/app/HabitoSaudePage';
 
 export const authContext = createContext();
 
@@ -289,11 +290,14 @@ const App = () => {
                                 <Route path="/login">
                                     <LoginPage props={useAuth} />
                                 </Route>
-                                <PrivateRoute path='/'>
-                                    <HomePage/>
+                                <PrivateRoute exact path='/'>
+                                    <HomePage />
                                 </PrivateRoute>
                                 <PrivateRoute path='/teste'>
                                     <HomePage />
+                                </PrivateRoute>
+                                <PrivateRoute path='/habitos'>
+                                    <HabitoSaudePage />
                                 </PrivateRoute>
                             </Switch>
                         </Router>
@@ -334,6 +338,7 @@ const useAuth = () => {
 
 const useProvideAuth = () => {
     const [user, setUser] = useState(getUsersMe());
+    const [perfilSelected, setPerilSelected] = useState(getUserPerfilSelected());
     const [isLoged, setIsLoged] = useState(fnIsLoged());
     const [token, setToken] = useState(getToken());
     let history = useHistory();
@@ -361,6 +366,8 @@ const useProvideAuth = () => {
         isLoged,
         token,
         user,
+        perfilSelected,
+        setPerilSelected,
         signin,
         signout
     };

@@ -10,6 +10,7 @@ const HomePage = () => {
     const [agendamentos, setAgendamentos] = useState(null);
     const context = useContext(authContext);
     const usuarioLogado = context.user;
+    const [perfilSelected, setPerfilSelected] = useState(context.perfilSelected || context.user.perfis[0]);
 
     useEffect(() => {
         const agendamentoService = new AgendamentoService();
@@ -26,11 +27,11 @@ const HomePage = () => {
                 <div className="col-12 lg:col-6 xl:col-3">
                     <div className="card mb-0">
                         <div className="flex">
-                            <Avatar className="p-overlay-badge mr-3" image="https://www.primefaces.org/primereact/images/organization/walter.jpg" size="xlarge"></Avatar>
+                            <Avatar className="p-overlay-badge mr-3" image={usuarioLogado.foto} size="xlarge"></Avatar>
                             <h4 className="align-self-center mb-">{usuarioLogado.nome}</h4>
                         </div>
                         <p className="mb-0 p-panel-header">
-                            Perfil: Paciente <span className="text-right">Alterar Perfil</span>
+                            Perfil: {(perfilSelected?.tipo||" ? ").toUpperCase()} <span className="text-right">Alterar Perfil</span>
                         </p>
                     </div>
                 </div>

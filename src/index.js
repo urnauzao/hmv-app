@@ -5,13 +5,16 @@ import App from './App';
 //import * as serviceWorker from './serviceWorker';
 import { HashRouter } from 'react-router-dom'
 import ScrollToTop from './ScrollToTop';
+import { BrowserRouter } from 'react-router-dom';
 
 ReactDOM.render(
-    <HashRouter>
-        <ScrollToTop>
-            <App></App>
-        </ScrollToTop>
-    </HashRouter>,
+    // <HashRouter>
+        <BrowserRouter>
+            <ScrollToTop>
+                <App></App>
+            </ScrollToTop>
+        </BrowserRouter>,
+    // </HashRouter>,
     document.getElementById('root')
 );
 

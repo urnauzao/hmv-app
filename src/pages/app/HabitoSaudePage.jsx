@@ -1,7 +1,7 @@
 import React from 'react';
 
 const HabitoSaudePage = () => {
-
+    console.log('habitos');
     return (
         <div className="grid">
             <div className="col-12">
@@ -14,8 +14,9 @@ const HabitoSaudePage = () => {
     );
 }
 
-const comparisonFn = function (prevProps, nextProps) {
-    return prevProps.location.pathname === nextProps.location.pathname;
-};
+// const comparisonFn = function (prevProps, nextProps) {
+//     return prevProps.location.pathname === nextProps.location.pathname;
+// };
 
-export default React.memo(HabitoSaudePage, comparisonFn);
+// export default React.memo(HabitoSaudePage, comparisonFn);
+export default HabitoSaudePage;

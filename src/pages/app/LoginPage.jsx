@@ -8,6 +8,7 @@ import { Redirect, useHistory, useLocation, Route } from "react-router-dom";
 import { authContext } from "../../App";
 
 const LoginPage = ({ props }) => {
+    const location = useLocation();
     const [usuario, setUsuario] = useState();
     const [senha, setSenha] = useState();
     // const auth = props();
@@ -39,7 +40,16 @@ const LoginPage = ({ props }) => {
             );
             // history.replace({ from: { pathname: "/" } });
         }
-    }, [isLoged]);
+    }, [isLoged, context.isLoged]);
+
+    if (isLoged || context.isLoged) { 
+        return  <Redirect
+                    to={{
+                        pathname: "/",
+                        state: { from: location }
+                    }}
+                />
+    }
 
     return (
         <div className="grid">

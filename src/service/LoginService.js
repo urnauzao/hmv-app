@@ -53,7 +53,8 @@ class LoginService {
     }
 
     logout() {
-        StorageService.remove('api_token');
+        // StorageService.remove('api_token');
+        StorageService.clear();
     }
 
 }
@@ -73,9 +74,21 @@ const getUsersMe = () => {
     }
     return null;
 }
-
-const setUsersMe = (user) => { 
+const setUsersMe = (user) => {
     StorageService.add('users_me', JSON.stringify(user));
 }
 
-export { isLoged, getToken, getUsersMe, setUsersMe, LoginService };
+const getUserPerfilSelected = () => {
+    let perfil = StorageService.get('perfil_selected');
+    if (perfil) {
+        return JSON.parse(perfil);
+    }
+    return null;
+}
+const setUserPerfilSelected = (perfil) => {
+    StorageService.add('perfil_selected', JSON.stringify(perfil));
+}
+
+
+
+export { isLoged, getToken, getUsersMe, setUsersMe, getUserPerfilSelected, setUserPerfilSelected, LoginService };
