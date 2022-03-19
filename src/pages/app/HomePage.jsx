@@ -5,12 +5,20 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
 import { authContext } from "./../../App";
+import { Dialog } from 'primereact/dialog';
+import { RadioButton } from 'primereact/radiobutton';
 
 const HomePage = () => {
     const [agendamentos, setAgendamentos] = useState(null);
     const context = useContext(authContext);
     const usuarioLogado = context.user;
-    const [perfilSelected, setPerfilSelected] = useState(context.perfilSelected || context.user.perfis[0]);
+    /** setar perfil selecionado */
+    const [perfilSelected, setPerfilSelected] = useState(context.perfilSelected || context.user?.perfis[0]);
+    /** mostrar ou não a modal para alteração de perfil */
+    const [displayBasic, setDisplayBasic] = useState(false);
+    /** select perfil */
+    const [radioSelectedPefil, setRadioSelectedPerfil] = useState(perfilSelected?.tipo);
+    
 
     useEffect(() => {
         const agendamentoService = new AgendamentoService();
@@ -20,6 +28,17 @@ const HomePage = () => {
     const formatCurrency = (value) => {
         return value.toLocaleString("pt-BR", { minimumFractionDigits: 2, style: "currency", currency: "BRL" });
     };
+
+    const dialogChangePerfilFooter = <Button type="button" label="Salvar" onClick={() => chagePerfil() } icon="pi pi-check" className="p-button-secondary" />;
+    const chagePerfil = () => { 
+        usuarioLogado.perfis.map((perfil) => {
+            if (perfil.tipo === radioSelectedPefil) {
+                context.setPerilSelected(perfil)
+                setPerfilSelected(perfil);
+            }
+        });
+        setDisplayBasic(false)
+    }
 
     return (
         <>
@@ -31,7 +50,29 @@ const HomePage = () => {
                             <h4 className="align-self-center mb-">{usuarioLogado.nome}</h4>
                         </div>
                         <p className="mb-0 p-panel-header">
-                            Perfil: {(perfilSelected?.tipo||" ? ").toUpperCase()} <span className="text-right">Alterar Perfil</span>
+                            Perfil: {(perfilSelected?.tipo || " ? ").toUpperCase()}
+                            <Dialog header="Alterar Perfil" visible={displayBasic} style={{ width: '30vw' }} modal footer={dialogChangePerfilFooter} onHide={() => setDisplayBasic(false)}>
+                                <div className="grid py-2">
+                                    <div className="col-12">
+                                        <p>Selecione o perfil de conta que deseja acessar:</p>
+                                    </div>
+                                    {
+                                        Array.isArray(usuarioLogado.perfis) && usuarioLogado.perfis.length > 0 ? usuarioLogado.perfis.map((perfil) => { 
+                                            let string  = perfil.tipo.charAt(0).toUpperCase() + perfil.tipo.slice(1)
+                                            return(
+                                                <div className="col-12 md:col-4" key={string}>
+                                                    <div className="field-radiobutton">
+                                                        <RadioButton inputId={"option-"+perfil.tipo} name="option" value={perfil.tipo} checked={radioSelectedPefil === perfil.tipo} onChange={(e) => setRadioSelectedPerfil(e.value)} />
+                                                        <label htmlFor={"option-"+perfil.tipo}>{string}</label>
+                                                    </div>
+                                                </div>
+                                            )
+                                        }) :
+                                        <p>Atualize a página e tente novamente</p>
+                                    }
+                                </div>
+                            </Dialog>
+                            <Button type="button" label="Alterar Perfil" icon="pi pi-external-link" onClick={() => setDisplayBasic(true)} />
                         </p>
                     </div>
                 </div>
@@ -92,7 +133,7 @@ const HomePage = () => {
                             </div>
                         </div>
                         {/* <span className="text-green-500 font-medium">85 </span> */}
-                        <span className="text-500">Atualizado em 02/08/2021</span>
+                        <span className="text-500">Atualizado em {usuarioLogado?.updated_at.split('T',1).join().split('-',3).reverse().join('/')}</span>
                     </div>
                 </div>
             </div>
