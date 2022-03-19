@@ -21,9 +21,9 @@ import './assets/demo/Demos.scss';
 import './assets/layout/layout.scss';
 import './App.scss';
 import LoginPage from './pages/app/LoginPage';
-import { getToken, isLoged as fnIsLoged, LoginService } from './service/LoginService';
+import { getToken, getUsersMe, isLoged as fnIsLoged, LoginService } from './service/LoginService';
 
-const authContext = createContext();
+export const authContext = createContext();
 
 const App = () => {
     const [layoutMode, setLayoutMode] = useState('static');
@@ -333,14 +333,15 @@ const useAuth = () => {
 }
 
 const useProvideAuth = () => {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState(getUsersMe());
     const [isLoged, setIsLoged] = useState(fnIsLoged());
     const [token, setToken] = useState(getToken());
     let history = useHistory();
-    console.log("useProvideAuth");
+    console.log("useProvideAuth", user, isLoged);
     const signin = async (email, senha, device_name, cb) => {
         let loginService = new LoginService();
         await loginService.postLogin(email, senha, device_name);
+        await loginService.getMe(getToken());
         if (fnIsLoged()) {
             setIsLoged(true);
             console.log('está logado', isLoged);

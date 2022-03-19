@@ -23,6 +23,22 @@ class LoginService {
                 }
         );
     }
+    async getMe(token)  { 
+        const url = ApiRoutes['API_URL'] + ApiRoutes['LOGIN']['GET_ME'];
+        this.reqService.setAuth(token);
+        return this.reqService.get(url)
+            .then(res => res.data)
+            .then(result => { 
+                console.log("result", result)
+                setUsersMe(result);
+            })
+            .catch(
+                (err) => {
+                    console.log(err);
+                    // console.log({ success: false, ...err.response?.data || err.response });
+                }
+        );
+    }
 
     setUser = ({ datas }) => {
         for (const key in datas) {
@@ -50,4 +66,16 @@ const getToken = () => {
     return StorageService.get('api_token');
 }
 
-export { isLoged, getToken, LoginService };
+const getUsersMe = () => {
+    let usersMe = StorageService.get('users_me');
+    if (usersMe) { 
+        return JSON.parse(usersMe);
+    }
+    return null;
+}
+
+const setUsersMe = (user) => { 
+    StorageService.add('users_me', JSON.stringify(user));
+}
+
+export { isLoged, getToken, getUsersMe, setUsersMe, LoginService };

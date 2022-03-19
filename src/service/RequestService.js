@@ -7,11 +7,12 @@ export class RequestService {
     }
 
     setAuth = (bearer) => { 
-        this.config.headers = { Authorization: bearer }
+        this.config.headers = { Authorization: 'Bearer ' + bearer }
         return this;
     }
 
     get = (url) => { 
+        console.log(this.config)
         return axios.get(url, this.config)
     }
 
