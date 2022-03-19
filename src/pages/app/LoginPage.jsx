@@ -107,7 +107,8 @@ const LoginPage = ({ props }) => {
 }
 
 const comparisonFn = function (prevProps, nextProps) {
-    return prevProps.location.pathname === nextProps.location.pathname;
+    console.log({ prevProps }, prevProps.props(), {nextProps}, nextProps.props())
+    return prevProps?.location?.pathname === nextProps?.location?.pathname;
 };
 
 export default React.memo(LoginPage, comparisonFn);
