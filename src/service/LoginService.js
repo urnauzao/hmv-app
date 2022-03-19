@@ -15,7 +15,6 @@ class LoginService {
         })
             .then(res => res.data)
             .then(result => { 
-                // console.log('resultado', result);
                 this.setLogin(result);
             })
             .catch(
@@ -23,6 +22,14 @@ class LoginService {
                     console.log({ success: false, ...err.response.data});
                 }
         );
+    }
+
+    setUser = ({ datas }) => {
+        for (const key in datas) {
+            if (Object.hasOwnProperty.call(datas, key)) {
+                StorageService.add(key, datas[key]);
+            }
+        }
     }
 
     setLogin(token) { 

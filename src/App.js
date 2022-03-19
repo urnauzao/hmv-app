@@ -21,7 +21,7 @@ import './assets/demo/Demos.scss';
 import './assets/layout/layout.scss';
 import './App.scss';
 import LoginPage from './pages/app/LoginPage';
-import { isLoged, LoginService } from './service/LoginService';
+import { getToken, isLoged as fnIsLoged, LoginService } from './service/LoginService';
 
 const authContext = createContext();
 
@@ -263,28 +263,6 @@ const App = () => {
         'layout-theme-light': layoutColorMode === 'light'
     });
 
-    // const PrivateRoute = ({ children, ...rest }) => {
-    //     console.warn("PrivateRoute");
-    //     return (
-    //         <Route
-    //             {...rest}
-    //             render={() => {
-    //                 // return LoginService.isLoged === true ? (
-    //                 return LoginService.isLoged() === true ? (
-    //                     children
-    //                 ) : (
-    //                     <Redirect to="/login" />
-    //                 );
-    //             }}
-    //         />
-    //     );
-    // }
-
-
-
-    /** https://v5.reactrouter.com/web/example/auth-workflow */
-    // https://www.digitalocean.com/community/tutorials/how-to-add-login-authentication-to-react-applications
-
     return (
         <ProvideAuth>
             <div className={wrapperClass} onClick={onWrapperClick}>
@@ -335,19 +313,6 @@ const App = () => {
 
 export default App;
 
-
-const fakeAuth = {
-    isAuthenticated: false,
-    signin(cb) {
-        fakeAuth.isAuthenticated = true;
-        setTimeout(cb, 100); // fake async
-    },
-    signout(cb) {
-        fakeAuth.isAuthenticated = false;
-        setTimeout(cb, 100);
-    }
-};
-
 const ProvideAuth = ({ children }) => {
     const auth = useProvideAuth();
     return (
@@ -362,35 +327,30 @@ const useAuth = () => {
 }
 
 const useProvideAuth = () => {
-    const [user, setUser] = useState(isLoged());
-    const [token, setToken] = useState(isLoged());
+    const [user, setUser] = useState(null);
+    const [isLoged, setIsLoged] = useState(fnIsLoged());
+    const [token, setToken] = useState(getToken());
     let history = useHistory();
     console.log("useProvideAuth");
     const signin = async (email, senha, device_name, cb) => {
         let loginService = new LoginService();
-        await loginService.postLogin(email, senha, device_name, setUser);
+        await loginService.postLogin(email, senha, device_name);
         if (isLoged()) {
-            setUser({...{ email }, ...{ senha }, ...{ device_name }});
-
+            setIsLoged(true);
             console.log('está logado', user);
             history.replace({ from: { pathname: "/teste" } });
         }
     };
-    // const signin = cb => {
-    //     return fakeAuth.signin(() => {
-    //         setUser("user");
-    //         cb();
-    //     });
-    // };
 
     const signout = cb => {
-        return fakeAuth.signout(() => {
-            setUser(null);
-            cb();
-        });
+        let loginService = new LoginService();
+        loginService.logout();
+        setIsLoged(false);
     };
 
     return {
+        isLoged,
+        token,
         user,
         signin,
         signout
@@ -404,7 +364,7 @@ function PrivateRoute({ children, ...rest }) {
         <Route
             {...rest}
             render={({ location }) =>
-                auth.user ? (
+                auth.isLoged ? (
                     children
                 ) : (
                     <Redirect
@@ -418,24 +378,3 @@ function PrivateRoute({ children, ...rest }) {
         />
     );
 }
-
-
-// function ToLoginPage() {
-//     let history = useHistory();
-//     let location = useLocation();
-//     let auth = useAuth();
-
-//     let { from } = location.state || { from: { pathname: "/" } };
-//     let login = () => {
-//         auth.signin(() => {
-//             history.replace(from);
-//         });
-//     };
-
-//     return (
-//         <div>
-//             <p>You must log in to view the page at {from.pathname}</p>
-//             <button onClick={login}>Log in</button>
-//         </div>
-//     );
-// }
