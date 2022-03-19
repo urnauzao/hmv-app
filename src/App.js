@@ -284,7 +284,7 @@ const App = () => {
                 <div className="layout-main-container">
                     <div className="layout-main">
                                           
-                        <Router>
+                        <Router forceRefresh >
                             <Switch>
                                 <Route path="/login">
                                     <LoginPage props={useAuth} />
