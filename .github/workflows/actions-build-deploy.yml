@@ -4,10 +4,10 @@ on:
 
 jobs:
   build:
-    uses: Vis-Rodrigues/workflow-template/.github/workflows/react-build-action.yml@main
+    uses: Vis-Rodrigues/workflow-template/.github/workflows/react-build-action.yml@v1
       
   deploy-s3:
-    uses: Vis-Rodrigues/workflow-template/.github/workflows/react-deploy-s3-action.yml@main
+    uses: Vis-Rodrigues/workflow-template/.github/workflows/react-deploy-s3-action.yml@v1
     needs: build
     if: ${{ github.ref == 'refs/heads/master' }}
     with:
