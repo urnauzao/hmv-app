@@ -4,17 +4,18 @@ import { Password } from "primereact/password";
 import { Button } from "primereact/button";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Redirect, useHistory, useLocation, Route } from "react-router-dom";
+import { useNavigate, useLocation, Navigate } from "react-router-dom";
 import { authContext } from "../../App";
 
 const LoginPage = ({ props }) => {
+    let navigate = useNavigate();
     const location = useLocation();
     const [usuario, setUsuario] = useState();
     const [senha, setSenha] = useState();
     // const auth = props();
     const context = useContext(authContext);
     const [isLoged, setIsLoged] = useState(context.isLoged);
-    const history = useHistory();
+    const history = useNavigate();
     const [loadingLogin, setLoadingLogin] = useState(false);
 
     const login = () => {
@@ -26,31 +27,14 @@ const LoginPage = ({ props }) => {
         console.log({ isLoged });
         if (isLoged === true) {
             console.log("redirecionou");
-            // return <Redirect to="/" />;
-
-            return (
-                <Route
-                    render={() => (
-                        <Redirect
-                            to={{
-                                pathname: "/",
-                            }}
-                        />
-                    )}
-                />
-            );
-            // history.replace({ from: { pathname: "/" } });
+            return navigate('/');
+            // setTimeout(() => navigate('/'), 3000)
         }
     }, [isLoged, context.isLoged]);
 
-    if (isLoged || context.isLoged) { 
-        return  <Redirect
-                    to={{
-                        pathname: "/",
-                        state: { from: location }
-                    }}
-                />
-    }
+    // if (isLoged || context.isLoged) { 
+    //     setTimeout(() => navigate('/'), 3000)
+    // }
 
     return (
         <div className="grid">
@@ -140,9 +124,4 @@ const LoginPage = ({ props }) => {
     );
 };
 
-// const comparisonFn = function (prevProps, nextProps) {
-//     return prevProps.location.pathname === nextProps.location.pathname;
-// };
-
-// export default React.memo(LoginPage, comparisonFn);
 export default LoginPage;

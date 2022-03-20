@@ -24,14 +24,15 @@ const HomePage = () => {
     const [metrics, setMetrics] = useState([]);
     /** utilizado para saber se há algo sendo carregado na tela */
     const [loadingMetrics, setLoadingMetrics] = useState(false);
+    /** instancia PacienteService */
+    const pacienteService = new PacienteService();
 
 
     useEffect(() => {
         setLoadingMetrics(true);
-        console.log('passando aqui...');
-        switch (perfilSelected.tipo) {
+        console.log('HomePage::UseEffect::perfilSelected');
+        switch (perfilSelected?.tipo) {
             case 'paciente':
-                const pacienteService = new PacienteService();
                 const metricas = pacienteService.getMetrics(context?.token, perfilSelected.id);
                 metricas.then(metricas => { 
                     setMetrics(metricas);
@@ -40,7 +41,7 @@ const HomePage = () => {
                 })
                 break;
             default:
-                console.warn('Default não configurado', perfilSelected.tipo)
+                console.warn('Default não configurado', perfilSelected?.tipo)
         }
     }, [ perfilSelected ]);
 
@@ -72,8 +73,8 @@ const HomePage = () => {
                 <div className="col-12 lg:col-6 xl:col-3">
                     <div className="card mb-0">
                         <div className="flex">
-                            <Avatar className="p-overlay-badge mr-3" image={usuarioLogado.foto} size="xlarge"></Avatar>
-                            <h4 className="align-self-center mb-">{usuarioLogado.nome}</h4>
+                            <Avatar className="p-overlay-badge mr-3" image={usuarioLogado?.foto} size="xlarge"></Avatar>
+                            <h4 className="align-self-center mb-">{usuarioLogado?.nome}</h4>
                         </div>
                         <p className="mb-0 p-panel-header">
                             Perfil: {(perfilSelected?.tipo || " ? ").toUpperCase()}
@@ -83,13 +84,13 @@ const HomePage = () => {
                                         <p>Selecione o perfil de conta que deseja acessar:</p>
                                     </div>
                                     {
-                                        Array.isArray(usuarioLogado.perfis) && usuarioLogado.perfis.length > 0 ? usuarioLogado.perfis.map((perfil) => { 
+                                        Array.isArray(usuarioLogado?.perfis) && usuarioLogado?.perfis.length > 0 ? usuarioLogado?.perfis.map((perfil) => { 
                                             let string  = perfil?.tipo?.charAt(0)?.toUpperCase() + perfil?.tipo?.slice(1)
                                             return(
                                                 <div className="col-12 md:col-4" key={string}>
                                                     <div className="field-radiobutton">
-                                                        <RadioButton inputId={"option-"+perfil.tipo} name="option" value={perfil.tipo} checked={radioSelectedPefil === perfil.tipo} onChange={(e) => setRadioSelectedPerfil(e.value)} />
-                                                        <label htmlFor={"option-"+perfil.tipo}>{string}</label>
+                                                        <RadioButton inputId={"option-"+perfil?.tipo} name="option" value={perfil?.tipo} checked={radioSelectedPefil === perfil?.tipo} onChange={(e) => setRadioSelectedPerfil(e.value)} />
+                                                        <label htmlFor={"option-"+perfil?.tipo}>{string}</label>
                                                     </div>
                                                 </div>
                                             )
@@ -198,7 +199,6 @@ const HomePage = () => {
                                 header="Situação"
                                 style={{ width: "20%" }}
                                 body={(data) => {
-                                    console.log(data);
                                     switch(data.situacao){ 
                                         case '0':
                                             return <Button label="Agendado" icon="pi pi-search" type="button" className="p-button-text" />
