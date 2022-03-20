@@ -1,0 +1,18 @@
+name: Build React & Deploy S3
+on:
+  push:
+
+jobs:
+  build:
+    uses: Vis-Rodrigues/workflow-template/.github/workflows/react-build-action.yml@main
+      
+  deploy-s3:
+    uses: Vis-Rodrigues/workflow-template/.github/workflows/react-deploy-s3-action.yml@main
+    needs: build
+    if: ${{ github.ref == 'refs/heads/master' }}
+    with:
+      s3-bucket-name: 'fiap-hmv-react-bucket'
+    secrets:
+      aws-region: ${{ secrets.AWS_REGION }}
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
