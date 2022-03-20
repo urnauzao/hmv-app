@@ -4,5 +4,8 @@ export default {
     'LOGIN': {
         'POST_LOGIN': '/sanctum/token',
         'GET_ME': '/usuario/dados'
+    },
+    'PACIENTE': {
+        'GET_METRICS': '/paciente/metricas'
     }
 };

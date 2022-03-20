@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Avatar } from "primereact/avatar";
-import { AgendamentoService } from "./../../service/AgendamentoService";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
 import { authContext } from "./../../App";
 import { Dialog } from 'primereact/dialog';
 import { RadioButton } from 'primereact/radiobutton';
+import PacienteService from './../../service/PacienteService';
+
 
 const HomePage = () => {
-    const [agendamentos, setAgendamentos] = useState(null);
+    // const [agendamentos, setAgendamentos] = useState(null);
     const context = useContext(authContext);
     const usuarioLogado = context.user;
     /** setar perfil selecionado */
@@ -18,17 +19,43 @@ const HomePage = () => {
     const [displayBasic, setDisplayBasic] = useState(false);
     /** select perfil */
     const [radioSelectedPefil, setRadioSelectedPerfil] = useState(perfilSelected?.tipo);
-    
+    /** metricas de usuário */
+    const [metrics, setMetrics] = useState([]);
+
+    const [loadingMetrics, setLoadingMetrics] = useState(false);
+
 
     useEffect(() => {
-        const agendamentoService = new AgendamentoService();
-        agendamentoService.getAgendamentos().then((data) => setAgendamentos(data));
-    }, []);
+        // const agendamentoService = new AgendamentoService();
+        // agendamentoService.getAgendamentos().then((data) => setAgendamentos(data));
+        setLoadingMetrics(true);
+        console.log('passando aqui...');
+        switch (perfilSelected.tipo) {
+            case 'paciente':
+                const pacienteService = new PacienteService();
+                const metricas = pacienteService.getMetrics(context.token, perfilSelected.id);
+                metricas.then(metricas => { 
+                    setMetrics(metricas);
+                    console.log({ metricas });
+                    setLoadingMetrics(false);
+                })
+                break;
+            default:
+                console.warn('Default não configurado', perfilSelected.tipo)
+        }
+    }, [ perfilSelected ]);
 
     const formatCurrency = (value) => {
         return value.toLocaleString("pt-BR", { minimumFractionDigits: 2, style: "currency", currency: "BRL" });
     };
-
+    
+    const formatDate = (value) => { 
+        try {
+            return value.split('T',1).join().split('-',3).reverse().join('/')
+        } catch (error) {
+            return "Data desconhecida.";
+        }
+    }
     const dialogChangePerfilFooter = <Button type="button" label="Salvar" onClick={() => chagePerfil() } icon="pi pi-check" className="p-button-secondary" />;
     const chagePerfil = () => { 
         usuarioLogado.perfis.map((perfil) => {
@@ -58,7 +85,7 @@ const HomePage = () => {
                                     </div>
                                     {
                                         Array.isArray(usuarioLogado.perfis) && usuarioLogado.perfis.length > 0 ? usuarioLogado.perfis.map((perfil) => { 
-                                            let string  = perfil.tipo.charAt(0).toUpperCase() + perfil.tipo.slice(1)
+                                            let string  = perfil?.tipo?.charAt(0)?.toUpperCase() + perfil?.tipo?.slice(1)
                                             return(
                                                 <div className="col-12 md:col-4" key={string}>
                                                     <div className="field-radiobutton">
@@ -87,8 +114,16 @@ const HomePage = () => {
                                 <i className="pi pi-question-circle text-blue-500 text-xl" />
                             </div>
                         </div>
-                        {/* <span className="text-green-500 font-medium">24 new </span> */}
-                        <span className="text-500">Último questionário: 12/01/2022</span>
+                        {
+                            loadingMetrics ?
+                            <span className="text-500 text-center"><em>Carregando</em></span>
+                            : <>{
+                            metrics?.questionarios_emergencia?.total > 0 ? 
+                                <span className="text-500">Último questionário: { metrics?.questionarios_emergencia?.ultimo.split('-',3).reverse().join('/')}</span>
+                            :
+                                <span className="text-500">Nenhum questionário encontrado.</span>
+                            }</>
+                        }
                     </div>
                 </div>
                 <div className="col-12 lg:col-6 xl:col-3">
@@ -96,14 +131,22 @@ const HomePage = () => {
                         <div className="flex justify-content-between mb-3">
                             <div>
                                 <span className="block text-500 font-medium mb-3">Histórico de Atendimento</span>
-                                <div className="text-900 font-medium text-xl">12</div>
+                                <div className="text-900 font-medium text-xl">{metrics?.historicos?.total || 0}</div>
                             </div>
                             <div className="flex align-items-center justify-content-center bg-orange-100 border-round" style={{ width: "2.5rem", height: "2.5rem" }}>
                                 <i className="pi pi-map-marker text-orange-500 text-xl" />
                             </div>
                         </div>
-                        {/* <span className="text-green-500 font-medium">%52+ </span> */}
-                        <span className="text-500">Último antendimento: 10/12/2021</span>
+                        {
+                            loadingMetrics ?
+                            <span className="text-500 text-center"><em>Carregando</em></span>
+                            : <>{
+                            metrics?.historicos?.total > 0 ? 
+                                <span className="text-500">Último atendimento: { metrics?.historicos?.ultimo.split('-',3).reverse().join('/')}</span>
+                            :
+                                <span className="text-500">Nenhum atendimento encontrado.</span>
+                                }</>
+                        }
                     </div>
                 </div>
                 <div className="col-12 lg:col-6 xl:col-3">
@@ -117,8 +160,16 @@ const HomePage = () => {
                                 <i className="pi pi-heart-fill text-cyan-500 text-xl" />
                             </div>
                         </div>
-                        {/* <span className="text-green-500 font-medium">520  </span> */}
-                        <span className="text-500">Atualizado em 02/09/2021</span>
+                        {
+                            loadingMetrics ?
+                            <span className="text-500 text-center"><em>Carregando</em></span>
+                            : <>{
+                            metrics?.habitos?.total > 0 ? 
+                                <span className="text-500">Último atendimento: { metrics?.habitos?.ultimo?.split('-',3).reverse().join('/')}</span>
+                            :
+                                <span className="text-500">Você ainda não informou seus hábitos.</span>
+                                }</>
+                        }
                     </div>
                 </div>
                 <div className="col-12 lg:col-6 xl:col-3">
@@ -132,7 +183,6 @@ const HomePage = () => {
                                 <i className="pi pi-save text-purple-500 text-xl" />
                             </div>
                         </div>
-                        {/* <span className="text-green-500 font-medium">85 </span> */}
                         <span className="text-500">Atualizado em {usuarioLogado?.updated_at.split('T',1).join().split('-',3).reverse().join('/')}</span>
                     </div>
                 </div>
@@ -141,18 +191,36 @@ const HomePage = () => {
                 <div className="col-12 xl:col-6">
                     <div className="card">
                         <h5>Últimas Consultas</h5>
-                        <DataTable value={agendamentos} rows={5} paginator responsiveLayout="scroll">
-                            <Column header="Image" body={(data) => <img className="shadow-2" src={`assets/demo/images/product/${data.image}`} alt={data.image} width="50" />} />
-                            <Column field="name" header="Name" sortable style={{ width: "35%" }} />
-                            <Column field="price" header="Price" sortable style={{ width: "35%" }} body={(data) => formatCurrency(data.price)} />
+                        {/* 
+                        * estabelecimento.nome, estabelecimento.imagem, situacao, data
+                        */}
+                        {/* <DataTable value={() => {
+                            return loadingMetrics ? [] : metrics?.agendamentos?.lista
+                        }} rows={5} paginator responsiveLayout="scroll"> */}
+                        <DataTable value={metrics?.agendamentos?.lista} rows={5} paginator responsiveLayout="scroll" loading={loadingMetrics} sortField='data' sortOrder='-1'>
+                            <Column header="Imagem" body={(data) => <img className="shadow-2 w-full" src={data.estabelecimento.imagem} alt={data.estabelecimento.nome} />} />
+                            <Column field="estabelecimento.nome" header="Nome" sortable style={{ width: "35%" }} />
+                            <Column field="data" header="Data" sortable style={{ width: "20%" }} body={(data) => formatDate(data.data)} />
                             <Column
-                                header="View"
-                                style={{ width: "15%" }}
-                                body={() => (
-                                    <>
-                                        <Button icon="pi pi-search" type="button" className="p-button-text" />
-                                    </>
-                                )}
+                                header="Situação"
+                                style={{ width: "20%" }}
+                                body={(data) => {
+                                    console.log(data);
+                                    switch(data.situacao){ 
+                                        case '0':
+                                            return <Button label="Agendado" icon="pi pi-search" type="button" className="p-button-text" />
+                                        case '1':
+                                            return <Button label="Na espera" icon="pi pi-search" type="button" className="p-button-text" />
+                                        case '2':
+                                            return <Button label="Em realização" icon="pi pi-search" type="button" className="p-button-text" />
+                                        case '3':
+                                            return <Button label="Realizado" icon="pi pi-search" type="button" className="p-button-text" />
+                                        case '4':
+                                            return <Button label="Não realizado" icon="pi pi-search" type="button" className="p-button-text" />
+                                        default:
+                                            return <Button label="Desconhecido" icon="pi pi-search" type="button" className="p-button-text" />
+                                    }
+                                }}
                             />
                         </DataTable>
                     </div>
