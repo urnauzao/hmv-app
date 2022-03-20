@@ -12,6 +12,7 @@ import PacienteService from './../../service/PacienteService';
 const HomePage = () => {
     // const [agendamentos, setAgendamentos] = useState(null);
     const context = useContext(authContext);
+    /** armazena o usuário logado a partir do contexto */
     const usuarioLogado = context.user;
     /** setar perfil selecionado */
     const [perfilSelected, setPerfilSelected] = useState(context.perfilSelected || context.user?.perfis[0]);
@@ -21,19 +22,17 @@ const HomePage = () => {
     const [radioSelectedPefil, setRadioSelectedPerfil] = useState(perfilSelected?.tipo);
     /** metricas de usuário */
     const [metrics, setMetrics] = useState([]);
-
+    /** utilizado para saber se há algo sendo carregado na tela */
     const [loadingMetrics, setLoadingMetrics] = useState(false);
 
 
     useEffect(() => {
-        // const agendamentoService = new AgendamentoService();
-        // agendamentoService.getAgendamentos().then((data) => setAgendamentos(data));
         setLoadingMetrics(true);
         console.log('passando aqui...');
         switch (perfilSelected.tipo) {
             case 'paciente':
                 const pacienteService = new PacienteService();
-                const metricas = pacienteService.getMetrics(context.token, perfilSelected.id);
+                const metricas = pacienteService.getMetrics(context?.token, perfilSelected.id);
                 metricas.then(metricas => { 
                     setMetrics(metricas);
                     console.log({ metricas });
@@ -45,9 +44,9 @@ const HomePage = () => {
         }
     }, [ perfilSelected ]);
 
-    const formatCurrency = (value) => {
-        return value.toLocaleString("pt-BR", { minimumFractionDigits: 2, style: "currency", currency: "BRL" });
-    };
+    // const formatCurrency = (value) => {
+    //     return value.toLocaleString("pt-BR", { minimumFractionDigits: 2, style: "currency", currency: "BRL" });
+    // };
     
     const formatDate = (value) => { 
         try {
@@ -191,12 +190,6 @@ const HomePage = () => {
                 <div className="col-12 xl:col-6">
                     <div className="card">
                         <h5>Últimas Consultas</h5>
-                        {/* 
-                        * estabelecimento.nome, estabelecimento.imagem, situacao, data
-                        */}
-                        {/* <DataTable value={() => {
-                            return loadingMetrics ? [] : metrics?.agendamentos?.lista
-                        }} rows={5} paginator responsiveLayout="scroll"> */}
                         <DataTable value={metrics?.agendamentos?.lista} rows={5} paginator responsiveLayout="scroll" loading={loadingMetrics} sortField='data' sortOrder='-1'>
                             <Column header="Imagem" body={(data) => <img className="shadow-2 w-full" src={data.estabelecimento.imagem} alt={data.estabelecimento.nome} />} />
                             <Column field="estabelecimento.nome" header="Nome" sortable style={{ width: "35%" }} />
@@ -230,9 +223,4 @@ const HomePage = () => {
     );
 };
 
-// const comparisonFn = function (prevProps, nextProps) {
-//     return prevProps.location.pathname === nextProps.location.pathname;
-// };
-
-// export default React.memo(HomePage, comparisonFn);
 export default HomePage;

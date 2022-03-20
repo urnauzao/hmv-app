@@ -14,8 +14,9 @@ const QuestionarioEmergenciaPage = () => {
     );
 }
 
-const comparisonFn = function (prevProps, nextProps) {
-    return prevProps.location.pathname === nextProps.location.pathname;
-};
+// const comparisonFn = function (prevProps, nextProps) {
+//     return prevProps.location.pathname === nextProps.location.pathname;
+// };
 
-export default React.memo(QuestionarioEmergenciaPage, comparisonFn);
+// export default React.memo(QuestionarioEmergenciaPage, comparisonFn);
+export default QuestionarioEmergenciaPage;

@@ -15,9 +15,10 @@ const LoginPage = ({ props }) => {
     const context = useContext(authContext);
     const [isLoged, setIsLoged] = useState(context.isLoged);
     const history = useHistory();
+    const [loadingLogin, setLoadingLogin] = useState(false);
 
     const login = () => {
-        // auth.signin(usuario, senha, navigator.userAgent);
+        setLoadingLogin(true);
         context.signin(usuario, senha, navigator.userAgent);
     };
 
@@ -87,7 +88,7 @@ const LoginPage = ({ props }) => {
                             <Button
                                 label="Acessar"
                                 icon="pi pi-check"
-                                // loading={loading}
+                                loading={loadingLogin}
                                 onClick={login}
                             />
                             <p className="align-self-center px-2">Esqueci a senha</p>
