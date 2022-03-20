@@ -9,7 +9,7 @@ jobs:
   deploy-s3:
     uses: Vis-Rodrigues/workflow-template/.github/workflows/react-deploy-s3-action.yml@v1
     needs: build
-    if: ${{ github.ref == 'refs/heads/master' }}
+    if: ${{ github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v') }}
     with:
       s3-bucket-name: 'fiap-hmv-react-bucket'
     secrets:
