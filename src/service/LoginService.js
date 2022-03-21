@@ -16,12 +16,12 @@ class LoginService {
             .then(res => res.data)
             .then(result => { 
                 this.setLogin(result);
+                return result;
             })
-            .catch(
-                (err) => {
-                    console.log({ success: false, ...err.response.data});
-                }
-        );
+            .catch((err) => {
+                    console.log({ success: false, ...err.response.data });
+                    return null;
+            });
     }
     async getMe(token)  { 
         const url = ApiRoutes['API_URL'] + ApiRoutes['LOGIN']['GET_ME'];
@@ -31,11 +31,14 @@ class LoginService {
             .then(result => { 
                 console.log("result", result)
                 setUsersMe(result);
+                setUserPerfilSelected(result.perfis[0])
+                return result;
             })
             .catch(
                 (err) => {
                     console.log(err);
                     // console.log({ success: false, ...err.response?.data || err.response });
+                    return null;
                 }
         );
     }

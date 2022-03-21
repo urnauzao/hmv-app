@@ -7,6 +7,7 @@ import { authContext } from "./../../App";
 import { Dialog } from 'primereact/dialog';
 import { RadioButton } from 'primereact/radiobutton';
 import PacienteService from './../../service/PacienteService';
+import { Link } from "react-router-dom";
 
 
 const HomePage = () => {
@@ -15,11 +16,11 @@ const HomePage = () => {
     /** armazena o usuário logado a partir do contexto */
     const usuarioLogado = context.user;
     /** setar perfil selecionado */
-    const [perfilSelected, setPerfilSelected] = useState(context.perfilSelected || context.user?.perfis[0]);
+    const [perfilSelected, setPerfilSelected] = useState(null);
     /** mostrar ou não a modal para alteração de perfil */
     const [displayBasic, setDisplayBasic] = useState(false);
     /** select perfil */
-    const [radioSelectedPefil, setRadioSelectedPerfil] = useState(perfilSelected?.tipo);
+    const [radioSelectedPefil, setRadioSelectedPerfil] = useState();
     /** metricas de usuário */
     const [metrics, setMetrics] = useState([]);
     /** utilizado para saber se há algo sendo carregado na tela */
@@ -27,22 +28,30 @@ const HomePage = () => {
     /** instancia PacienteService */
     const pacienteService = new PacienteService();
 
+    useEffect(() => {
+        console.log('useEffectHomePage', context)
+        if (context.perfilSelected) {
+            setPerfilSelected(context.perfilSelected)
+            setRadioSelectedPerfil(context.perfilSelected.tipo)
+        }
+    }, []);
 
     useEffect(() => {
         setLoadingMetrics(true);
         console.log('HomePage::UseEffect::perfilSelected');
-        switch (perfilSelected?.tipo) {
-            case 'paciente':
-                const metricas = pacienteService.getMetrics(context?.token, perfilSelected.id);
-                metricas.then(metricas => { 
-                    setMetrics(metricas);
-                    console.log({ metricas });
-                    setLoadingMetrics(false);
-                })
-                break;
-            default:
-                console.warn('Default não configurado', perfilSelected?.tipo)
-        }
+        if(context.perfilSelected)
+            switch (context.perfilSelected.tipo) {
+                case 'paciente':
+                    const metricas = pacienteService.getMetrics(context.token, context.perfilSelected.id);
+                    metricas.then(metricas => { 
+                        setMetrics(metricas);
+                        console.log({ metricas });
+                        setLoadingMetrics(false);
+                    })
+                    break;
+                default:
+                    console.warn('Default não configurado', context.perfilSelected.tipo)
+            }
     }, [ perfilSelected ]);
 
     // const formatCurrency = (value) => {
@@ -70,7 +79,7 @@ const HomePage = () => {
     return (
         <>
             <div className="grid">
-                <div className="col-12 lg:col-6 xl:col-3">
+                <div className="col-12 md:col-12 lg:col-6 xl:col-6 mb-3">
                     <div className="card mb-0">
                         <div className="flex">
                             <Avatar className="p-overlay-badge mr-3" image={usuarioLogado?.foto} size="xlarge"></Avatar>
@@ -103,15 +112,19 @@ const HomePage = () => {
                         </p>
                     </div>
                 </div>
+            </div>
+            <div className="grid">
                 <div className="col-12 lg:col-6 xl:col-3">
                     <div className="card mb-0">
                         <div className="flex justify-content-between mb-3">
                             <div>
-                                <span className="block text-500 font-medium mb-3">Questionário de Emergência</span>
-                                <div className="text-900 font-medium text-xl">Criar novo</div>
+                                <span className="block text-500 font-medium mb-3 text-lg text-primary">Questionário de Emergência</span>
+                                <Link to="/questionario-emergencia">
+                                    <Button type="button" label="Criar novo" className="p-button-outlined" icon="pi pi-star-fill" />
+                                </Link>
                             </div>
-                            <div className="flex align-items-center justify-content-center bg-blue-100 border-round" style={{ width: "2.5rem", height: "2.5rem" }}>
-                                <i className="pi pi-question-circle text-blue-500 text-xl" />
+                            <div className="flex align-items-center justify-content-center bg-pink-100 border-round" style={{ width: "2.5rem", height: "2.5rem" }}>
+                                <i className="pi pi-question-circle text-pink-600 text-xl" />
                             </div>
                         </div>
                         {
@@ -130,7 +143,7 @@ const HomePage = () => {
                     <div className="card mb-0">
                         <div className="flex justify-content-between mb-3">
                             <div>
-                                <span className="block text-500 font-medium mb-3">Histórico de Atendimento</span>
+                                <span className="block text-500 font-medium mb-3 text-lg text-primary">Histórico de Atendimento</span>
                                 <div className="text-900 font-medium text-xl">{metrics?.historicos?.total || 0}</div>
                             </div>
                             <div className="flex align-items-center justify-content-center bg-orange-100 border-round" style={{ width: "2.5rem", height: "2.5rem" }}>
@@ -153,7 +166,7 @@ const HomePage = () => {
                     <div className="card mb-0">
                         <div className="flex justify-content-between mb-3">
                             <div>
-                                <span className="block text-500 font-medium mb-3">Hábitos de Saúde</span>
+                                <span className="block text-500 font-medium mb-3 text-lg text-primary">Hábitos de Saúde</span>
                                 <div className="text-900 font-medium text-xl">Atualizar Hábitos</div>
                             </div>
                             <div className="flex align-items-center justify-content-center bg-cyan-100 border-round" style={{ width: "2.5rem", height: "2.5rem" }}>
@@ -176,7 +189,7 @@ const HomePage = () => {
                     <div className="card mb-0">
                         <div className="flex justify-content-between mb-3">
                             <div>
-                                <span className="block text-500 font-medium mb-3">Meus Dados</span>
+                                <span className="block text-500 font-medium mb-3 text-lg text-primary">Meus Dados</span>
                                 <div className="text-900 font-medium text-xl">Atualizar Dados</div>
                             </div>
                             <div className="flex align-items-center justify-content-center bg-purple-100 border-round" style={{ width: "2.5rem", height: "2.5rem" }}>
@@ -201,16 +214,22 @@ const HomePage = () => {
                                 body={(data) => {
                                     switch(data.situacao){ 
                                         case '0':
+                                            /** Agendado */
                                             return <Button label="Agendado" icon="pi pi-search" type="button" className="p-button-text" />
                                         case '1':
+                                            /** Na espera */
                                             return <Button label="Na espera" icon="pi pi-search" type="button" className="p-button-text" />
                                         case '2':
+                                            /** Em realização */
                                             return <Button label="Em realização" icon="pi pi-search" type="button" className="p-button-text" />
                                         case '3':
+                                            /** Realizado */
                                             return <Button label="Realizado" icon="pi pi-search" type="button" className="p-button-text" />
                                         case '4':
+                                            /** Não realizado */
                                             return <Button label="Não realizado" icon="pi pi-search" type="button" className="p-button-text" />
                                         default:
+                                            /** Desconhecido */
                                             return <Button label="Desconhecido" icon="pi pi-search" type="button" className="p-button-text" />
                                     }
                                 }}

@@ -256,15 +256,19 @@ const useAuth = () => {
 const useProvideAuth = () => {
     const [user, setUser] = useState(getUsersMe());
     const [perfilSelected, setPerilSelected] = useState(getUserPerfilSelected());
-    const [isLoged, setIsLoged] = useState(fnIsLoged());
     const [token, setToken] = useState(getToken());
-    let history = useNavigate();
+    const [isLoged, setIsLoged] = useState(fnIsLoged());
+    const history = useNavigate();
+
     console.log("useProvideAuth", user, isLoged);
     const signin = async (email, senha, device_name, cb) => {
         let loginService = new LoginService();
-        await loginService.postLogin(email, senha, device_name);
-        await loginService.getMe(getToken());
+        let newToken = await loginService.postLogin(email, senha, device_name);
+        let user = await loginService.getMe(getToken());
         if (fnIsLoged()) {
+            setUser(user);
+            setPerilSelected(user.perfis[0]);
+            setToken(newToken);
             setIsLoged(true);
             console.log('está logado', isLoged);
             history("/", true);
@@ -275,6 +279,9 @@ const useProvideAuth = () => {
         console.log('saindo');
         let loginService = new LoginService();
         loginService.logout();
+        setUser(null);
+        setPerilSelected(null);
+        setToken(null);
         setIsLoged(false);
         history("/login", true);
     };
