@@ -11,7 +11,12 @@ const ApiRoutes = {
     'QUESTIONARIO_EMERGENCIA': {
         'GET_NEW_QUESTIONARIO':'/questionario_emergencia/novo',
         'POST_NEW_QUESTIONARIO': '/questionario_emergencia/novo'
+    },
+    'HABITO_SAUDE': {
+        'GET_NEW_HABITO':'/habito_saude/novo',
+        'POST_NEW_HABITO': '/habito_saude/novo'
     }
+
 };
 
 export default ApiRoutes;

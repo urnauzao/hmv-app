@@ -8,6 +8,7 @@ import { Dialog } from 'primereact/dialog';
 import { RadioButton } from 'primereact/radiobutton';
 import PacienteService from './../../service/PacienteService';
 import { Link } from "react-router-dom";
+import { Chip } from 'primereact/chip';
 
 
 const HomePage = () => {
@@ -28,6 +29,14 @@ const HomePage = () => {
     /** instancia PacienteService */
     const pacienteService = new PacienteService();
 
+    const cardBgColors = {
+        'paciente': 'bg-blue-100',
+        'medico': 'bg-green-100',
+        'atendente': 'bg-yellow-100',
+        'socorrista': 'bg-pink-100',
+        'admin': 'bg-teal-100'
+    };
+
     useEffect(() => {
         console.log('useEffectHomePage', context)
         if (context.perfilSelected) {
@@ -37,21 +46,23 @@ const HomePage = () => {
     }, []);
 
     useEffect(() => {
-        setLoadingMetrics(true);
-        console.log('HomePage::UseEffect::perfilSelected');
-        if(context.perfilSelected)
-            switch (context.perfilSelected.tipo) {
-                case 'paciente':
-                    const metricas = pacienteService.getMetrics(context.token, context.perfilSelected.id);
-                    metricas.then(metricas => { 
-                        setMetrics(metricas);
-                        console.log({ metricas });
-                        setLoadingMetrics(false);
-                    })
-                    break;
-                default:
-                    console.warn('Default não configurado', context.perfilSelected.tipo)
-            }
+        if(loadingMetrics === false){
+            setLoadingMetrics(true);
+            console.log('HomePage::UseEffect::perfilSelected');
+            if(context.perfilSelected)
+                switch (context.perfilSelected.tipo) {
+                    case 'paciente':
+                        const metricas = pacienteService.getMetrics(context.token, context.perfilSelected.id);
+                        metricas.then(metricas => { 
+                            setMetrics(metricas);
+                            console.log({ metricas });
+                            setLoadingMetrics(false);
+                        })
+                        break;
+                    default:
+                        console.warn('Default não configurado', context.perfilSelected.tipo)
+                    }
+        }
     }, [ perfilSelected ]);
 
     // const formatCurrency = (value) => {
@@ -80,13 +91,13 @@ const HomePage = () => {
         <>
             <div className="grid">
                 <div className="col-12 md:col-12 lg:col-6 xl:col-6 mb-3">
-                    <div className="card mb-0">
+                    <div className={"card mb-0 "+cardBgColors[perfilSelected?.tipo]}>
                         <div className="flex">
                             <Avatar className="p-overlay-badge mr-3" image={usuarioLogado?.foto} size="xlarge"></Avatar>
                             <h4 className="align-self-center mb-">{usuarioLogado?.nome}</h4>
                         </div>
-                        <p className="mb-0 p-panel-header">
-                            Perfil: {(perfilSelected?.tipo || " ? ").toUpperCase()}
+                        <p className="mb-0 p-panel-header align-items-center">
+                            <Chip className="bg-white shadow-2 text-primary" label={(perfilSelected?.tipo || " ? ").toUpperCase()} />
                             <Dialog header="Alterar Perfil" visible={displayBasic} style={{ width: '30vw' }} modal footer={dialogChangePerfilFooter} onHide={() => setDisplayBasic(false)}>
                                 <div className="grid py-2">
                                     <div className="col-12">
@@ -167,7 +178,9 @@ const HomePage = () => {
                         <div className="flex justify-content-between mb-3">
                             <div>
                                 <span className="block text-500 font-medium mb-3 text-lg text-primary">Hábitos de Saúde</span>
-                                <div className="text-900 font-medium text-xl">Atualizar Hábitos</div>
+                                <Link to="/habitos">
+                                    <Button type="button" label="Novo Hábito" className="p-button-outlined" icon="pi pi-star-fill" />
+                                </Link>
                             </div>
                             <div className="flex align-items-center justify-content-center bg-cyan-100 border-round" style={{ width: "2.5rem", height: "2.5rem" }}>
                                 <i className="pi pi-heart-fill text-cyan-500 text-xl" />
