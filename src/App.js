@@ -179,7 +179,6 @@ const App = () => {
         'p-ripple-disabled': ripple === false,
         'layout-theme-light': layoutColorMode === 'light'
     });
-    console.log(location);
 
     return (
         <ProvideAuth>
@@ -223,6 +222,7 @@ const App = () => {
                                     <QuestionarioEmergenciaPage />
                                 </PrivateRoute>
                             } />
+                            <Route path="*" element={<Navigate to="/login" replace/>} />
                         </Routes>
                     </div>
 
