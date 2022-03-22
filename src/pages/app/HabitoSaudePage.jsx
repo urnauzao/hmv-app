@@ -34,7 +34,7 @@ const HabitoSaudePage = () => {
                     result.respostas_ultimo_habito_saude_em_aberto.length > 0) { 
                     console.log("result.respostas_ultimo_habito_saude_em_aberto", result.respostas_ultimo_habito_saude_em_aberto)
                     for (const resp of result.respostas_ultimo_habito_saude_em_aberto) { 
-                        __respostas[resp.id] = resp.resposta_texto;
+                        __respostas[resp.pergunta_habito_saude_id] = resp.resposta_texto;
                     }
                     setRespostas(__respostas);
                 }

@@ -30,7 +30,7 @@ const QuestionarioEmergenciaPage = () => {
                 result.respostas_ultimo_questionario_em_aberto.length > 0) { 
                 console.log("result.respostas_ultimo_questionario_em_aberto", result.respostas_ultimo_questionario_em_aberto)
                 for (const resp of result.respostas_ultimo_questionario_em_aberto) { 
-                    __respostas[resp.id] = resp.resposta_texto;
+                    __respostas[resp.pergunta_emergencia_id] = resp.resposta_texto;
                 }
                 setRespostas(__respostas);
             }

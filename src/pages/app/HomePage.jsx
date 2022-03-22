@@ -96,8 +96,11 @@ const HomePage = () => {
                             <Avatar className="p-overlay-badge mr-3" image={usuarioLogado?.foto} size="xlarge"></Avatar>
                             <h4 className="align-self-center mb-">{usuarioLogado?.nome}</h4>
                         </div>
-                        <p className="mb-0 p-panel-header align-items-center">
+                        <div className="flex p-column-filter-buttonbar">
                             <Chip className="bg-white shadow-2 text-primary" label={(perfilSelected?.tipo || " ? ").toUpperCase()} />
+                            <Button type="button" label="Alterar Perfil" icon="pi pi-external-link" onClick={() => setDisplayBasic(true)} />
+                        </div>
+                        <p className="mb-0 p-panel-header align-items-center">
                             <Dialog header="Alterar Perfil" visible={displayBasic} style={{ width: '30vw' }} modal footer={dialogChangePerfilFooter} onHide={() => setDisplayBasic(false)}>
                                 <div className="grid py-2">
                                     <div className="col-12">
@@ -119,7 +122,6 @@ const HomePage = () => {
                                     }
                                 </div>
                             </Dialog>
-                            <Button type="button" label="Alterar Perfil" icon="pi pi-external-link" onClick={() => setDisplayBasic(true)} />
                         </p>
                     </div>
                 </div>

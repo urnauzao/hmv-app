@@ -140,7 +140,7 @@ const App = () => {
 
     const menu = [
         {
-            label: 'HMV APP',
+            label: 'Connect HMV',
             items: [
                 {
                     label: 'Início', icon: 'pi pi-fw pi-home', to: '/'
@@ -179,26 +179,30 @@ const App = () => {
         'p-ripple-disabled': ripple === false,
         'layout-theme-light': layoutColorMode === 'light'
     });
+    console.log(location);
 
     return (
         <ProvideAuth>
             <div className={wrapperClass} onClick={onWrapperClick}>
                 <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
-
-                <AppTopbar
-                    onToggleMenuClick={onToggleMenuClick}
-                    layoutColorMode={layoutColorMode}
-                    mobileTopbarMenuActive={mobileTopbarMenuActive}
-                    onMobileTopbarMenuClick={onMobileTopbarMenuClick}
-                    onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick}
-                    auth={useAuth}
-                />
-
-                <div className="layout-sidebar" onClick={onSidebarClick}>
-                    <AppMenu model={menu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />
-                </div>
-
-                <div className="layout-main-container">
+                {
+                    location.pathname !== '/login' &&
+                    <>
+                        <AppTopbar
+                            onToggleMenuClick={onToggleMenuClick}
+                            layoutColorMode={layoutColorMode}
+                            mobileTopbarMenuActive={mobileTopbarMenuActive}
+                            onMobileTopbarMenuClick={onMobileTopbarMenuClick}
+                            onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick}
+                            auth={useAuth}
+                        />
+                        <div className="layout-sidebar" onClick={onSidebarClick}>
+                            <AppMenu model={menu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} auth={useAuth}/>
+                        </div>
+                    </>
+                }
+                    
+                <div className={location.pathname !== '/login' ? "layout-main-container" : "py-3 px-8"}>
                     <div className="layout-main">
                         <Routes>
                             <Route path="/login" element={ 
