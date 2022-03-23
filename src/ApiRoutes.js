@@ -1,9 +1,12 @@
 const ApiRoutes = {
     'APP_URL': 'http://localhost:8000',
-    'API_URL': 'http://localhost:8000/api',
+    // 'API_URL': 'http://localhost:8000/api',
+    'API_URL': 'https://d1vg0iaktfp68d.cloudfront.net',
+    
     'LOGIN': {
         'POST_LOGIN': '/sanctum/token',
-        'GET_ME': '/usuario/dados'
+        // 'GET_ME': '/usuario/dados'
+        'GET_ME': '/fiap-hmv/v1/users'
     },
     'PACIENTE': {
         'GET_METRICS': '/paciente/metricas',
