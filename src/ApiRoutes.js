@@ -4,7 +4,8 @@ const ApiRoutes = {
     'API_URL': 'https://d1vg0iaktfp68d.cloudfront.net',
     
     'LOGIN': {
-        'POST_LOGIN': '/sanctum/token',
+        // 'POST_LOGIN': '/sanctum/token',
+        'POST_LOGIN': '/fiap-hmv/v1/login',
         // 'GET_ME': '/usuario/dados'
         'GET_ME': '/fiap-hmv/v1/users'
     },
