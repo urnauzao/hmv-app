@@ -6,7 +6,8 @@ const ApiRoutes = {
         'GET_ME': '/usuario/dados'
     },
     'PACIENTE': {
-        'GET_METRICS': '/paciente/metricas'
+        'GET_METRICS': '/paciente/metricas',
+        'POST_CHAMADO_EMERGENCIA': '/paciente/chamado_emergencia'
     },
     'QUESTIONARIO_EMERGENCIA': {
         'GET_NEW_QUESTIONARIO':'/questionario_emergencia/novo',
@@ -15,6 +16,9 @@ const ApiRoutes = {
     'HABITO_SAUDE': {
         'GET_NEW_HABITO':'/habito_saude/novo',
         'POST_NEW_HABITO': '/habito_saude/novo'
+    },
+    'ENDERECO': {
+        'GET_ALL_MY': '/endereco/meus'
     }
 
 };

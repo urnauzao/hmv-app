@@ -24,6 +24,7 @@ import LoginPage from './pages/app/LoginPage';
 import { getToken, getUserPerfilSelected, getUsersMe, isLoged as fnIsLoged, LoginService } from './service/LoginService';
 import HabitoSaudePage from './pages/app/HabitoSaudePage';
 import QuestionarioEmergenciaPage from './pages/app/QuestionarioEmergenciaPage';
+import { TipoMenuService } from './service/TipoMenuService';
 
 export const authContext = createContext();
 
@@ -38,6 +39,7 @@ const App = () => {
     const [mobileTopbarMenuActive, setMobileTopbarMenuActive] = useState(false);
     const copyTooltipRef = useRef();
     const location = useLocation();
+    const [menu, setMenu] = useState(TipoMenuService.menuPaciente);
 
     PrimeReact.ripple = true;
 
@@ -138,22 +140,19 @@ const App = () => {
         return window.innerWidth >= 992;
     }
 
-    const menu = [
-        {
-            label: 'Connect HMV',
-            items: [
-                {
-                    label: 'Início', icon: 'pi pi-fw pi-home', to: '/'
-                },
-                {
-                    label: 'Questionário de Emergência', icon: 'pi pi-fw pi-plus-circle', to: '/questionario-emergencia'
-                },
-                {
-                    label: 'Hábitos de Saúde', icon: 'pi pi-fw pi-heart-fill', to: '/habitos'
-                }
-            ]
+
+
+    const changeMenuPerfil = (tipo = null) => { 
+        console.log({ tipo });
+        switch (tipo) {
+            case 'medico':
+                setMenu(TipoMenuService.menuMedico);
+                break;
+            default:
+                setMenu(TipoMenuService.menuPaciente);
+                break;
         }
-    ];
+    }
 
     const addClass = (element, className) => {
         if (element.classList)
@@ -209,7 +208,7 @@ const App = () => {
                             }/>
                             <Route exact path='/' element={
                                 <PrivateRoute >
-                                    <HomePage />
+                                    <HomePage changeMenuPerfil={changeMenuPerfil}/>
                                 </PrivateRoute>    
                             }/>
                             <Route path='/habitos' element={ 
@@ -271,7 +270,7 @@ const useProvideAuth = () => {
         let user = await loginService.getMe(getToken());
         if (fnIsLoged()) {
             setUser(user);
-            setPerilSelected(user.perfis[0]);
+            setPerilSelected(user?.perfis?.find((x) => { return x?.tipo === 'paciente'} ));
             setToken(newToken);
             setIsLoged(true);
             console.log('está logado', isLoged);
