@@ -12,6 +12,9 @@ import { Chip } from 'primereact/chip';
 import { Dropdown } from 'primereact/dropdown';
 import EnderecoService from './../../service/EnderecoService';
 import { Toast } from 'primereact/toast';
+import MedicoService from "../../service/MedicoService";
+import EmergenciaCard from "../../components/EmergenciaCard";
+import TabelaAgendamentoMedico from './../../components/TabelaAgendamentoMedico';
 
 
 const HomePage = ({ changeMenuPerfil }) => {
@@ -31,6 +34,8 @@ const HomePage = ({ changeMenuPerfil }) => {
     const [loadingMetrics, setLoadingMetrics] = useState(true);
     /** instancia PacienteService */
     const pacienteService = new PacienteService();
+    /** instancia MedicoService */
+    const medicoService = new MedicoService();
 
     const [myEnderecos, setMyEnderecos] = useState(null);
     const [selectedEndereco, setSelectedEndereco] = useState(null);
@@ -84,22 +89,26 @@ const HomePage = ({ changeMenuPerfil }) => {
                 setPerfilSelected(perfil);
                 loadActionsByPerfil(perfil.tipo, perfil.id);
             }
+            return perfil;
         });
         setDisplayBasic(false)
     }
-
+    /** AQUI SE CARREGAR OS DADOS DE EXIBIÇÃO ENTRE OS PERFIS */
     const loadActionsByPerfil = (tipo = null, id = null) => { 
         switch (tipo) {
             case 'paciente':
-                const metricas = pacienteService.getMetrics(context.token, id || context.perfilSelected?.id);
-                metricas.then(metricas => { 
+                const metricasPaciente = pacienteService.getMetrics(context.token, id || context.perfilSelected?.id);
+                metricasPaciente.then(metricas => { 
                     setMetrics(metricas);
                     changeMenuPerfil('paciente');
                 })
                 break;
             case 'medico':
-                console.log("chamando changeMenuPerfil");
-                changeMenuPerfil('medico');
+                const metricasMedico = medicoService.getMetrics(context.token, id || context.perfilSelected?.id);
+                metricasMedico.then(metricas => { 
+                    setMetrics(metricas);
+                    changeMenuPerfil('medico');
+                })
                 break;
             default:
                 console.warn('Default não configurado', context.perfilSelected.tipo)
@@ -148,6 +157,7 @@ const HomePage = ({ changeMenuPerfil }) => {
     const showSuccessChamadoEmergencia = () => {
         toast.current.show({ severity: 'success', summary: 'Chamado de Emergência Realizado!', detail: 'Em minutos nossa equipe está se deslocando até você para realizar o atendimento.', life: 7000 });
     };
+
     return (
         <>
             <div className="grid">
@@ -349,132 +359,63 @@ const HomePage = ({ changeMenuPerfil }) => {
             {/* PACIENTE - FIM*/}
             {/* MÉDICO */}
             {
-                perfilSelected?.tipo === 'medico' &&
+                (perfilSelected?.tipo === 'medico' &&
                 <div className="grid">
-                    <div className="col-12 lg:col-6 xl:col-4">
-                        <div className="card mb-0 border-pink-700 hover:border-pink-900 border-3 border-round font-bold flex align-items-center bg-pink-100">
-                            <div className="flex justify-content-between mb-3">
-                                <div>
-                                <p>
-                                    <span className="block text-500 text-4xl font-medium mb-3 text-lg text-pink-600">Emergência!</span>
-                                </p>
-                                    <h4 className="align-items-center flex"><Avatar size="xlarge" className="mx-2" image={"/images/avatar/stephenshaw.png"}/>NOME DO PACIENTE</h4>
-                                    <Button type="button" label="Quest. Emergência" className="p-button-raised p-button-text bg-white m-1 hover:bg-white-alpha-50" icon="pi pi-star-fill" />
-                                    <Button type="button" label="Habitos de Saúde" className="p-button-raised p-button-text bg-white m-1 hover:bg-white-alpha-50" icon="pi pi-star-fill" />
-                                    <Button type="button" label="Histórico" className="p-button-raised p-button-text bg-white m-1 hover:bg-white-alpha-50" icon="pi pi-star-fill" />
-                                    <Button type="button" label="Concluir Atendimento" className="p-button-raised p-button-text bg-white m-1 hover:bg-white-alpha-50" icon="pi pi-star-fill" />    
-                                </div>
-                                <div className="flex align-items-center justify-content-center bg-pink-100 border-round" style={{ width: "2.5rem", height: "2.5rem" }}>
-                                    <i className="pi pi-question-circle text-pink-600 text-xl" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-12 lg:col-6 xl:col-4">
-                        <div className="card mb-0">
-                            <div className="flex justify-content-between mb-3">
-                                <div>
-                                <p>
-                                    <span className="block text-500 font-medium mb-3 text-lg text-primary">Último Paciente</span>
-                                    <span className="block text-500 font-medium mb-3 text-lg text-primary">01/01/2022 às 10:00h</span>
-                                </p>
-                                    <h4 className="align-items-center flex"><Avatar size="xlarge" className="mx-2" image={"/images/avatar/stephenshaw.png"}/>NOME DO PACIENTE</h4>
-                                    <Button type="button" label="Quest. Emergência" className="p-button-raised p-button-text bg-white m-1 hover:bg-white-alpha-50" icon="pi pi-star-fill" />
-                                    <Button type="button" label="Habitos de Saúde" className="p-button-raised p-button-text bg-white m-1 hover:bg-white-alpha-50" icon="pi pi-star-fill" />
-                                    <Button type="button" label="Histórico" className="p-button-raised p-button-text bg-white m-1 hover:bg-white-alpha-50" icon="pi pi-star-fill" />
-                                    <Button type="button" label="Concluir Atendimento" className="p-button-raised p-button-text bg-white m-1 hover:bg-white-alpha-50" icon="pi pi-star-fill" />    
-                                </div>
-                                <div className="flex align-items-center justify-content-center bg-pink-100 border-round" style={{ width: "2.5rem", height: "2.5rem" }}>
-                                    <i className="pi pi-question-circle text-pink-600 text-xl" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-12 lg:col-6 xl:col-4">
-                        <div className="card mb-0">
-                            <div className="flex justify-content-between mb-3">
-                                <div>
-                                    <p>
-                                        <span className="block text-500 font-medium mb-3 text-lg text-primary">Próximo Paciente</span>
-                                        <span className="block text-500 font-medium mb-3 text-lg text-primary">01/01/2022 às 10:00h</span>
-                                        <b className="text-pink-700">OBS:</b>
-                                    </p>
-                                    <h4 className="align-items-center flex"><Avatar size="xlarge" className="mx-2" image={"/images/avatar/asiyajavayant.png"}/>NOME DO PACIENTE</h4>
-                                    <Button type="button" label="Quest. Emergência" className="p-button-raised p-button-text bg-white m-1 hover:bg-white-alpha-50" icon="pi pi-star-fill" />
-                                    <Button type="button" label="Habitos de Saúde" className="p-button-raised p-button-text bg-white m-1 hover:bg-white-alpha-50" icon="pi pi-star-fill" />
-                                    <Button type="button" label="Histórico" className="p-button-raised p-button-text bg-white m-1 hover:bg-white-alpha-50" icon="pi pi-star-fill" />
-                                    <Button type="button" label="Concluir Atendimento" className="p-button-raised p-button-text bg-white m-1 hover:bg-white-alpha-50" icon="pi pi-star-fill" />    
-                                </div>
-                                <div className="flex align-items-center justify-content-center bg-pink-100 border-round" style={{ width: "2.5rem", height: "2.5rem" }}>
-                                    <i className="pi pi-question-circle text-pink-600 text-xl" />
-                                </div>
-                            </div>
-                                
+                    {(loadingMetrics && <h5 className="text-center">Carregando...</h5> ) || null}        
 
-                            <p className="mb-0 p-panel-header align-items-center">
-                                <Dialog header="Alterar Perfil" visible={displayBasic} style={{ width: '30vw' }} modal footer={dialogChangePerfilFooter} onHide={() => setDisplayBasic(false)}>
-                                    <div className="grid py-2">
-                                        <div className="col-12">
-                                            <p>Selecione o perfil de conta que deseja acessar:</p>
-                                        </div>
-                                        {
-                                            Array.isArray(usuarioLogado?.perfis) && usuarioLogado?.perfis.length > 0 ? usuarioLogado?.perfis.map((perfil) => { 
-                                                let string  = perfil?.tipo?.charAt(0)?.toUpperCase() + perfil?.tipo?.slice(1)
-                                                return(
-                                                    <div className="col-12 md:col-4" key={string}>
-                                                        <div className="field-radiobutton">
-                                                            <RadioButton inputId={"option-"+perfil?.tipo} name="option" value={perfil?.tipo} checked={radioSelectedPefil === perfil?.tipo} onChange={(e) => setRadioSelectedPerfil(e.value)} />
-                                                            <label htmlFor={"option-"+perfil?.tipo}>{string}</label>
-                                                        </div>
-                                                    </div>
-                                                )
-                                            }) :
-                                            <p>Atualize a página e tente novamente</p>
-                                        }
-                                    </div>
-                                </Dialog>
-                            </p>
+                    {(!loadingMetrics && metrics?.minhas_emergencias && metrics?.minhas_emergencias?.length &&
+                        <div className="col-12">
+                            <div className="grid">
+                            <h2 className="text-pink-700">Minhas Emergências</h2>
+                            {
+                                (
+                                    metrics?.minhas_emergencias.map((emergencia) => {
+                                        return <EmergenciaCard emergencia={emergencia} key={emergencia.id}/>
+                                    })
+                                ) || ( !loadingMetrics &&
+                                    <h5>Você não possuí nenhuma emergência</h5>
+                                )
+                            }
+                            </div>
                         </div>
-                    </div>
-                    {true===false &&
-                    <div className="col-12">
-                        <div className="card">
-                            <h5>Próximas Consultas:</h5>
-                            <DataTable value={metrics?.agendamentos?.lista} rows={5} paginator responsiveLayout="scroll" loading={loadingMetrics} sortField='data' sortOrder='-1'>
-                                <Column header="Local" body={(data) => <img className="shadow-2 w-full" src={data.estabelecimento.imagem} alt={data.estabelecimento.nome} />} />
-                                <Column field="estabelecimento.nome" header="Paciente" sortable style={{ width: "35%" }} />
-                                <Column field="data" header="Data" sortable style={{ width: "20%" }} body={(data) => formatDate(data.data)} />
-                                <Column
-                                    header="Situação"
-                                    style={{ width: "20%" }}
-                                    body={(data) => {
-                                        switch(data.situacao){ 
-                                            case '0':
-                                                /** Agendado */
-                                                return <Button label="Agendado" icon="pi pi-search" type="button" className="p-button-text" />
-                                            case '1':
-                                                /** Na espera */
-                                                return <Button label="Na espera" icon="pi pi-search" type="button" className="p-button-text" />
-                                            case '2':
-                                                /** Em realização */
-                                                return <Button label="Em realização" icon="pi pi-search" type="button" className="p-button-text" />
-                                            case '3':
-                                                /** Realizado */
-                                                return <Button label="Realizado" icon="pi pi-search" type="button" className="p-button-text" />
-                                            case '4':
-                                                /** Não realizado */
-                                                return <Button label="Não realizado" icon="pi pi-search" type="button" className="p-button-text" />
-                                            default:
-                                                /** Desconhecido */
-                                                return <Button label="Desconhecido" icon="pi pi-search" type="button" className="p-button-text" />
-                                        }
-                                    }}
-                                />
-                            </DataTable>
+                    ) || null}
+                    {!loadingMetrics && metrics?.outras_emergencias && 
+                        <div className="col-12">
+                            <div className="grid">
+                                <div className="col-12 mb-0">
+                                    <h2 className="text-pink-700 mb-0">Outras Emergências</h2>
+                                </div>
+                            {
+                                (
+                                    metrics?.outras_emergencias.map((emergencia) => {
+                                        return <EmergenciaCard emergencia={emergencia} key={emergencia.id}/>
+                                    })
+                                ) || ( !loadingMetrics &&
+                                    <h5>Não existe nenhuma emergência no estabelecimento.</h5>
+                                )
+                            }
+                            </div>
                         </div>
-                    </div>
-                    }    
+                    }
+                    {!loadingMetrics && metrics?.agendamentos && 
+                        <div className="col-12">
+                            <div className="grid">
+                                <div className="col-12 mb-0">
+                                    <h2 className="text-pink-700 mb-0">Agendamento de Consultas:</h2>
+                                </div>
+                            {
+                                (
+                                    metrics?.agendamentos && 
+                                    <TabelaAgendamentoMedico agendamentos={metrics?.agendamentos}/>
+                                ) || ( !loadingMetrics &&
+                                    <h5>Você não possuí agendamentos para os próximos dias.</h5>
+                                )
+                            }
+                            </div>
+                        </div>
+                    }
                 </div>
+                )|| null   
             }
             {/* MÉDICO - FIM */}
             {/* ATENDENTE */}

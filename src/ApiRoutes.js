@@ -19,6 +19,9 @@ const ApiRoutes = {
     },
     'ENDERECO': {
         'GET_ALL_MY': '/endereco/meus'
+    },
+    'MEDICO': {
+        'GET_METRICS': '/medico/metricas'
     }
 
 };
