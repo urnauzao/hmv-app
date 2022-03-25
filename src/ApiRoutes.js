@@ -21,7 +21,18 @@ const ApiRoutes = {
         'GET_ALL_MY': '/endereco/meus'
     },
     'MEDICO': {
-        'GET_METRICS': '/medico/metricas'
+        'GET_METRICS': '/medico/metricas',
+        'GET_QUEST_EMERG_PACIENTE': '/medico/questionario_emergencia',
+        'GET_HABITO_SAUDE_PACIENTE': '/medico/habito_saude',
+        'GET_HISTORICO_PACIENTE': '/medico/historico',
+        'POST_RELATORIO_ATENDIMENTO' : '/medico/relatorio_atendimento'
+    },
+    'ATENDENTE': {
+        'GET_METRICS': '/metricas',
+        'POST_AGENDAMENTO_NEW': '/agendamento/novo',
+        'PUT_AGENDAMENTO_SIT': '/agendamento/situacao',
+        'GET_AGENDAMENTO_DEFINIR_MEDICO': '/agendamento/definir_medico/',
+        'GET_AGENDAMENTO_ESTABELECIMENTOS': '/agendamento/estabelecimentos'
     }
 
 };
