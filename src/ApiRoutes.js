@@ -12,8 +12,8 @@ const ApiRoutes = {
         'POST_CHAMADO_EMERGENCIA': '/v1/pacientes/chamados_emergencia' 
     },
     'QUESTIONARIO_EMERGENCIA': {
-        'GET_NEW_QUESTIONARIO': '/v1/questionarios-emergencia/perfil/',  
-        'POST_NEW_QUESTIONARIO': '/v1/questionarios-emergencia/perfil/'  
+        'GET_NEW_QUESTIONARIO': '/v1/questionarios-emergencia/perfil',  
+        'POST_NEW_QUESTIONARIO': '/v1/questionarios-emergencia/perfil'  
     },
     'HABITO_SAUDE': {
         'GET_NEW_HABITO': '/v1/habito-saude',  
@@ -25,16 +25,16 @@ const ApiRoutes = {
     'MEDICO': {
         'GET_METRICS': '/v1/metricas/medicos/',                                        
         'GET_QUEST_EMERG_PACIENTE': '/v1/questionarios-emergencia/medico',             
-        'GET_HABITO_SAUDE_PACIENTE': '/v1/habitos-saude/medicos/',                     
-        'GET_HISTORICO_PACIENTE': '/fiap-hmv/v1/atendimentos/historicos/pacientes/',   
-        'POST_RELATORIO_ATENDIMENTO' : '/fiap-hmv/v1/atendimentos/medicos'             
+        'GET_HABITO_SAUDE_PACIENTE': '/v1/habitos-saude/medicos',                     
+        'GET_HISTORICO_PACIENTE': '/v1/atendimentos/historicos/pacientes',   
+        'POST_RELATORIO_ATENDIMENTO' : '/v1/atendimentos/medicos'             
     },
     'ATENDENTE': {
         'GET_METRICS': '/v1/metricas/atendentes',                                                               
-        'POST_AGENDAMENTO_NEW': '/fiap-hmv/v1/agendamentos/atendentes/',                                        
-        'PUT_AGENDAMENTO_SIT': '/fiap-hmv/v1/agendamentos/atendentes/{id}/status/{status_id}',                  
-        'GET_AGENDAMENTO_DEFINIR_MEDICO': '/fiap-hmv/v1/agendamentos/{id_agendamento}/medicos/{id_medico}',     
-        'GET_AGENDAMENTO_ESTABELECIMENTOS': '/v1/agendamentos/pacientes/{id}/estabelecimentos/enderecos', 
+        'POST_AGENDAMENTO_NEW': '/v1/agendamentos/atendentes/',                                        
+        'PUT_AGENDAMENTO_SIT': '/v1/agendamentos/atendentes/{agendamento_id}/status/{situacao_id}',                  
+        'GET_AGENDAMENTO_DEFINIR_MEDICO': '/v1/agendamentos/{agendamento_id}/medicos/{medico_id}',     
+        'GET_AGENDAMENTO_ESTABELECIMENTOS': '/v1/agendamentos/pacientes/{paciente_id}/estabelecimentos/enderecos', 
         'POST_PACIENTE_BUSCAR': '/v1/pacientes/busca'
     }
 
