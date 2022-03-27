@@ -528,13 +528,11 @@ const HomePage = ({ changeMenuPerfil }) => {
             }
             {/* SOCORRISTA - FIM */}
             {/* ADMIN */}
-            {perfilSelected?.tipo === 'admin' &&
-                <iframe title="HMV - BI - Página 1"
-                    width="600" height="373.5"
-                    src="https://app.powerbi.com/view?r=eyJrIjoiZWYxMGM4ZDYtYmU4ZC00YzNlLTlkNmQtNzZhMzczYjA1YzVlIiwidCI6ImJjOThlYTcyLTdjYzAtNDI4OC1hODI1LTUyMDNiZDdmYTI5YSJ9"
-                    frameborder="0"
-                    allowFullScreen="true">
-                </iframe>
+            {(perfilSelected?.tipo === 'admin' &&
+                <><h2 className="text-indigo-600">Métricas de BI</h2>
+                <iframe title="HMV - Dashboard - Questionário de Emergência" width="100%" height="800" src="https://app.powerbi.com/view?r=eyJrIjoiOGE3ZTZmNDEtYjUxMS00ZjkzLTkzMmEtYzU0YTViM2U1MzhiIiwidCI6ImJjOThlYTcyLTdjYzAtNDI4OC1hODI1LTUyMDNiZDdmYTI5YSJ9" frameborder="0" allowFullScreen="true"></iframe>
+                </>
+            ) || null
             }
             {/* ADMIN - FIM*/}
         </>
