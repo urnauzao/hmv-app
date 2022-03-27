@@ -1,38 +1,40 @@
 const ApiRoutes = {
-    'APP_URL': 'http://localhost:8000',
-    'API_URL': 'http://localhost:8000/api',
+    // 'APP_URL': 'http://localhost:8000',
+    'APP_URL': 'https://d1vg0iaktfp68d.cloudfront.net',
+    // 'API_URL': 'http://localhost:8000/api',
+    'API_URL': 'https://d1vg0iaktfp68d.cloudfront.net/fiap-hmv',
     'LOGIN': {
-        'POST_LOGIN': '/sanctum/token',
-        'GET_ME': '/usuario/dados'
+        'POST_LOGIN': '/v1/login', // '/sanctum/token',
+        'GET_ME': '/v1/usuarios'   // '/usuario/dados'
     },
     'PACIENTE': {
-        'GET_METRICS': '/paciente/metricas',
-        'POST_CHAMADO_EMERGENCIA': '/paciente/chamado_emergencia'
+        'GET_METRICS': '/v1/metricas/pacientes',                       // '/paciente/metricas',
+        'POST_CHAMADO_EMERGENCIA': '/v1/pacientes/chamados_emergencia' // '/paciente/chamado_emergencia'
     },
     'QUESTIONARIO_EMERGENCIA': {
-        'GET_NEW_QUESTIONARIO':'/questionario_emergencia/novo',
-        'POST_NEW_QUESTIONARIO': '/questionario_emergencia/novo'
+        'GET_NEW_QUESTIONARIO': '/fiap-hmv/v1/questionarios-emergencia/perfil/',  // '/questionario_emergencia/novo',
+        'POST_NEW_QUESTIONARIO': '/fiap-hmv/v1/questionarios-emergencia/perfil/', // '/questionario_emergencia/novo'
     },
     'HABITO_SAUDE': {
-        'GET_NEW_HABITO':'/habito_saude/novo',
-        'POST_NEW_HABITO': '/habito_saude/novo'
+        'GET_NEW_HABITO': '/v1/habito-saude',  // '/habito_saude/novo',
+        'POST_NEW_HABITO': '/v1/habito-saude', // '/habito_saude/novo'
     },
     'ENDERECO': {
-        'GET_ALL_MY': '/endereco/meus'
+        'GET_ALL_MY': '/v1/enderecos' // '/endereco/meus'
     },
     'MEDICO': {
-        'GET_METRICS': '/medico/metricas',
-        'GET_QUEST_EMERG_PACIENTE': '/medico/questionario_emergencia',
-        'GET_HABITO_SAUDE_PACIENTE': '/medico/habito_saude',
-        'GET_HISTORICO_PACIENTE': '/medico/historico',
-        'POST_RELATORIO_ATENDIMENTO' : '/medico/relatorio_atendimento'
+        'GET_METRICS': '/v1/metricas/medicos/',                                        // '/medico/metricas',
+        'GET_QUEST_EMERG_PACIENTE': '/v1/questionarios-emergencia/medico',             // '/medico/questionario_emergencia',
+        'GET_HABITO_SAUDE_PACIENTE': '/v1/habitos-saude/medicos/',                     // '/medico/habito_saude',
+        'GET_HISTORICO_PACIENTE': '/fiap-hmv/v1/atendimentos/historicos/pacientes/',   // '/medico/historico',
+        'POST_RELATORIO_ATENDIMENTO' : '/fiap-hmv/v1/atendimentos/medicos'             // '/medico/relatorio_atendimento'
     },
     'ATENDENTE': {
-        'GET_METRICS': '/metricas',
-        'POST_AGENDAMENTO_NEW': '/agendamento/novo',
-        'PUT_AGENDAMENTO_SIT': '/agendamento/situacao',
-        'GET_AGENDAMENTO_DEFINIR_MEDICO': '/agendamento/definir_medico/',
-        'GET_AGENDAMENTO_ESTABELECIMENTOS': '/agendamento/estabelecimentos'
+        'GET_METRICS': '/v1/metricas/atendentes',                                                               // '/metricas',
+        'POST_AGENDAMENTO_NEW': '/fiap-hmv/v1/agendamentos/atendentes/',                                        // '/agendamento/novo',
+        'PUT_AGENDAMENTO_SIT': '/fiap-hmv/v1/agendamentos/atendentes/{id}/status/{status_id}',                  // '/agendamento/situacao',
+        'GET_AGENDAMENTO_DEFINIR_MEDICO': '/fiap-hmv/v1/agendamentos/{id_agendamento}/medicos/{id_medico}', // '/agendamento/definir_medico/',
+        'GET_AGENDAMENTO_ESTABELECIMENTOS': '/v1/agendamentos/pacientes/{id}/estabelecimentos/enderecos'        // '/agendamento/estabelecimentos'
     }
 
 };

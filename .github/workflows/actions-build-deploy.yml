@@ -1,6 +1,9 @@
 name: Build React & Deploy S3
 on:
   push:
+    branches:
+      - master
+      - test-cors2
 
 jobs:
   build:
