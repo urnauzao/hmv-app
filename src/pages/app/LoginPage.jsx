@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { Button } from "primereact/button";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link, useNavigate } from "react-router-dom";
 import { authContext } from "../../App";
@@ -208,7 +207,7 @@ const LoginPage = ({ props }) => {
                         <Chip label="Sou novo por aqui!" className="mr-2 mb-2 bg-purple-300 text-4xl text-white" />
                     </div>
                     <p>Crie você um usuário agora mesmo um usuário e comece a agendar suas consultas em qualque hospital da rede HMV.
-                        Para criar seu usuário clique no botão abaixo em "Quero me regitrar" e então informe todos os dados solicitados.
+                        Para criar seu usuário clique no botão abaixo em "Quero me registrar" e então informe todos os dados solicitados.
                         Depois de criado, você já pode acessar seu portal de paciente e com isso conseguir visulizar suas consultas ou solicitar uma emergência.
                     </p>
                     {
