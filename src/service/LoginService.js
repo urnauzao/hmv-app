@@ -60,6 +60,22 @@ class LoginService {
         StorageService.clear();
     }
 
+    async register (data = {}) {
+        const url = ApiRoutes['API_URL'] + ApiRoutes['LOGIN']['POST_REGISTER'];
+        return this.reqService.post(url, data)
+            .then(res => res.data)
+            .then(result => {
+                console.log("register", result)
+                return result;
+            })
+            .catch(
+                ({ response }) => {
+                    console.log(response);
+                    return null;
+                }
+            );
+    }
+
 }
 
 const isLoged = () => {
@@ -92,6 +108,27 @@ const setUserPerfilSelected = (perfil) => {
     StorageService.add('perfil_selected', JSON.stringify(perfil));
 }
 
+const newUserModel = { 
+    "email": "",
+    "password": "",
+    "doc_tipo": "",
+    "doc_numero": "",
+    "foto": "",
+    "nome": "",
+    "endereco":{
+        "nome": "",
+        "tipo": "",
+        "logradouro": "",
+        "cep": "",
+        "numero": "",
+        "cidade": "",
+        "estado": "",
+        "complemento": "",
+    }
+}
 
 
-export { isLoged, getToken, getUsersMe, setUsersMe, getUserPerfilSelected, setUserPerfilSelected, LoginService };
+
+
+
+export { isLoged, getToken, getUsersMe, setUsersMe, getUserPerfilSelected, setUserPerfilSelected, newUserModel, LoginService };

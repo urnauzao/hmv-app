@@ -9,6 +9,16 @@ export const TipoMenuService = {
             ]
         }
     ],
+    menuAtendente: [
+        {
+            label: 'Connect HMV | Atendente',
+            items: [
+                {
+                    label: 'Início', icon: 'pi pi-fw pi-home', to: '/'
+                }
+            ]
+        }
+    ],
     menuPaciente: [
         {
             label: 'Connect HMV',

@@ -8,7 +8,7 @@ export const AppConfig = (props) => {
 
     const [active, setActive] = useState(false);
     const [scale, setScale] = useState(14);
-    const [scales] = useState([12,13,14,15,16]);
+    const [scales] = useState([12,13,14,15,16,18,20]);
     const [theme, setTheme] = useState('lara-light-indigo');
     const config = useRef(null);
     let outsideClickListener = useRef(null);
@@ -122,7 +122,7 @@ export const AppConfig = (props) => {
             <Button className="p-button-danger layout-config-close p-button-rounded p-button-text" icon="pi pi-times" onClick={hideConfigurator}/>
 
             <div className="layout-config-content">
-                <h5 className="mt-0">Component Scale</h5>
+                <h5 className="mt-0">Aumentar Fonte</h5>
                 <div className="config-scale">
                     <Button icon="pi pi-minus" onClick={decrementScale} className="p-button-text" disabled={scale === scales[0]} />
                     {
@@ -133,34 +133,34 @@ export const AppConfig = (props) => {
                     <Button icon="pi pi-plus" onClick={incrementScale} className="p-button-text" disabled={scale === scales[scales.length - 1]} />
                 </div>
 
-                <h5>Input Style</h5>
+                <h5>Estilo</h5>
                 <div className="p-formgroup-inline">
                     <div className="field-radiobutton">
                         <RadioButton inputId="input_outlined" name="inputstyle" value="outlined" onChange={(e) => props.onInputStyleChange(e.value)} checked={props.inputStyle === 'outlined'} />
-                        <label htmlFor="input_outlined">Outlined</label>
+                        <label htmlFor="input_outlined">Contorno</label>
                     </div>
                     <div className="field-radiobutton">
                         <RadioButton inputId="input_filled" name="inputstyle" value="filled" onChange={(e) => props.onInputStyleChange(e.value)} checked={props.inputStyle === 'filled'} />
-                        <label htmlFor="input_filled">Filled</label>
+                        <label htmlFor="input_filled">Preenchido</label>
                     </div>
                 </div>
 
-                <h5>Ripple Effect</h5>
-                <InputSwitch checked={props.rippleEffect} onChange={props.onRippleEffect} />
+                {/* <h5>Ripple Effect</h5>
+                <InputSwitch checked={props.rippleEffect} onChange={props.onRippleEffect} /> */}
 
-                <h5>Menu Type</h5>
+                <h5>Menu</h5>
                 <div className="p-formgroup-inline">
                     <div className="field-radiobutton">
                         <RadioButton inputId="static" name="layoutMode" value="static" onChange={(e) => props.onLayoutModeChange(e.value)} checked={props.layoutMode === 'static'} />
-                        <label htmlFor="static">Static</label>
+                        <label htmlFor="static">Fixar</label>
                     </div>
                     <div className="field-radiobutton">
                         <RadioButton inputId="overlay" name="layoutMode" value="overlay" onChange={(e) => props.onLayoutModeChange(e.value)} checked={props.layoutMode === 'overlay'} />
-                        <label htmlFor="overlay">Overlay</label>
+                        <label htmlFor="overlay">Ocultar</label>
                     </div>
                 </div>
 
-                <h5>Themes</h5>
+                <h5>Temas</h5>
                 <h6 className="mt-0">Bootstrap</h6>
                 <div className="grid free-themes">
                     <div className="col-3 text-center">
