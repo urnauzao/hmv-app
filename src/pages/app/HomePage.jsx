@@ -15,6 +15,12 @@ import { Toast } from 'primereact/toast';
 import MedicoService from "../../service/MedicoService";
 import EmergenciaCard from "../../components/EmergenciaCard";
 import TabelaAgendamentoMedico from './../../components/TabelaAgendamentoMedico';
+import DialogQuestionariosPaciente from './../../components/DialogQuestionariosPaciente';
+import AtendenteService from './../../service/AtendenteService';
+import { StorageService } from "../../service/StorageService";
+import { LoginService, setUserPerfilSelected } from "../../service/LoginService";
+import TabelaAgendamentoAtendente from "../../components/TabelaAgendamentoAtendente";
+import FormBuscaPaciente from "../../components/FormBuscaPaciente";
 
 
 const HomePage = ({ changeMenuPerfil }) => {
@@ -36,11 +42,14 @@ const HomePage = ({ changeMenuPerfil }) => {
     const pacienteService = new PacienteService();
     /** instancia MedicoService */
     const medicoService = new MedicoService();
+    /** instancia AtendenteService */
+    const atendenteService = new AtendenteService();
 
     const [myEnderecos, setMyEnderecos] = useState(null);
     const [selectedEndereco, setSelectedEndereco] = useState(null);
     const [displayDialogEndereco, setDisplayDialogEndereco] = useState(false);
     const [loadingEnderecos, setLoadingEnderecos] = useState(false);
+    const [atendenteFindedPaciente, setAtendenteFindedPaciente] = useState(null);
 
     const toast = useRef();
 
@@ -86,6 +95,7 @@ const HomePage = ({ changeMenuPerfil }) => {
         usuarioLogado.perfis.map((perfil) => {
             if (perfil.tipo === radioSelectedPefil) {
                 context.setPerilSelected(perfil)
+                setUserPerfilSelected(perfil);
                 setPerfilSelected(perfil);
                 loadActionsByPerfil(perfil.tipo, perfil.id);
             }
@@ -108,6 +118,13 @@ const HomePage = ({ changeMenuPerfil }) => {
                 metricasMedico.then(metricas => { 
                     setMetrics(metricas);
                     changeMenuPerfil('medico');
+                })
+                break;
+            case 'atendente':
+                const metricasAtendente = atendenteService.getMetrics(context.token);
+                metricasAtendente.then(metricas => { 
+                    setMetrics(metricas);
+                    changeMenuPerfil('atendente');
                 })
                 break;
             default:
@@ -148,8 +165,8 @@ const HomePage = ({ changeMenuPerfil }) => {
                 }
                 setDisplayDialogEndereco(true);
             }
+            setLoadingEnderecos(false);
         });
-        setLoadingEnderecos(false);
 
     }
     const btnDialogChamadoEmergencia = <Button type="button" loading={loadingEnderecos} className="p-button" label="Chamar Agora!" onClick={fnChamarEmergencia} />
@@ -165,7 +182,7 @@ const HomePage = ({ changeMenuPerfil }) => {
                     <div className={"card mb-0 bg-"+cardBgColors[perfilSelected?.tipo]+"-100 border-" + cardBgColors[perfilSelected?.tipo] + "-800 border-3"}>
                         <div className="flex">
                             <Avatar className="p-overlay-badge mr-3" image={usuarioLogado?.foto} size="xlarge"></Avatar>
-                            <h4 className="align-self-center mb-">{usuarioLogado?.nome}</h4>
+                            <h4 className="align-self-center text-900">{usuarioLogado?.nome}</h4>
                         </div>
                         <div className="flex p-column-filter-buttonbar">
                             <Chip className="bg-white shadow-2 text-primary" label={(perfilSelected?.tipo || " ? ").toUpperCase()} />
@@ -224,7 +241,7 @@ const HomePage = ({ changeMenuPerfil }) => {
             {
                 perfilSelected?.tipo === 'paciente' &&
                 <div className="grid">
-                    <div className="col-12 lg:col-6 xl:col-3">
+                    <div className="col-12 md:col-6 lg:col-6 xl:col-4">
                         <div className="card mb-0">
                             <div className="flex justify-content-between mb-3">
                                 <div>
@@ -249,30 +266,7 @@ const HomePage = ({ changeMenuPerfil }) => {
                             }
                         </div>
                     </div>
-                    <div className="col-12 lg:col-6 xl:col-3">
-                        <div className="card mb-0">
-                            <div className="flex justify-content-between mb-3">
-                                <div>
-                                    <span className="block text-500 font-medium mb-3 text-lg text-primary">Histórico de Atendimento</span>
-                                    <div className="text-900 font-medium text-xl">{metrics?.historicos?.total || 0}</div>
-                                </div>
-                                <div className="flex align-items-center justify-content-center bg-orange-100 border-round" style={{ width: "2.5rem", height: "2.5rem" }}>
-                                    <i className="pi pi-map-marker text-orange-500 text-xl" />
-                                </div>
-                            </div>
-                            {
-                                loadingMetrics ?
-                                <span className="text-500 text-center"><em>Carregando</em></span>
-                                : <>{
-                                metrics?.historicos?.total > 0 ? 
-                                    <span className="text-500">Último atendimento: { metrics?.historicos?.ultimo.split('-',3).reverse().join('/')}</span>
-                                :
-                                    <span className="text-500">Nenhum atendimento encontrado.</span>
-                                    }</>
-                            }
-                        </div>
-                    </div>
-                    <div className="col-12 lg:col-6 xl:col-3">
+                    <div className="col-12 md:col-6 lg:col-6 xl:col-4">
                         <div className="card mb-0">
                             <div className="flex justify-content-between mb-3">
                                 <div>
@@ -297,7 +291,53 @@ const HomePage = ({ changeMenuPerfil }) => {
                             }
                         </div>
                     </div>
-                    <div className="col-12 lg:col-6 xl:col-3">
+                    <div className="col-12 md:col-6 lg:col-6 xl:col-4">
+                        <div className="card mb-0">
+                            <div className="flex justify-content-between mb-3">
+                                <div>
+                                    <span className="block text-500 font-medium mb-3 text-lg text-primary">Histórico de Atendimento</span>
+                                    <div className="text-900 font-medium text-xl">{metrics?.historicos?.total || 0}</div>
+                                </div>
+                                <div className="flex align-items-center justify-content-center bg-orange-100 border-round" style={{ width: "2.5rem", height: "2.5rem" }}>
+                                    <i className="pi pi-map-marker text-orange-500 text-xl" />
+                                </div>
+                            </div>
+                            {
+                                loadingMetrics ?
+                                <span className="text-500 text-center"><em>Carregando</em></span>
+                                : <>{
+                                metrics?.historicos?.total > 0 ? 
+                                    <span className="text-500">Último atendimento: { metrics?.historicos?.ultimo.split('-',3).reverse().join('/')}</span>
+                                :
+                                    <span className="text-500">Nenhum atendimento encontrado.</span>
+                                    }</>
+                            }
+                        </div>
+                    </div>
+                    <div className="col-12 md:col-6 lg:col-6 xl:col-4">
+                        <div className="card mb-0">
+                            <div className="flex justify-content-between mb-3">
+                                <div>
+                                    <span className="block text-500 font-medium mb-3 text-lg text-primary">Permissões</span>
+                                    <div className="text-900 font-medium text-xl">{0}</div>
+                                </div>
+                                <div className="flex align-items-center justify-content-center bg-orange-100 border-round" style={{ width: "2.5rem", height: "2.5rem" }}>
+                                    <i className="pi pi-map-marker text-orange-500 text-xl" />
+                                </div>
+                            </div>
+                            {
+                                loadingMetrics ?
+                                <span className="text-500 text-center"><em>Carregando</em></span>
+                                : <>{
+                                    null ? 
+                                    <span className="text-500">Último atendimento: { metrics?.historicos?.ultimo.split('-',3).reverse().join('/')}</span>
+                                    :
+                                    <span className="text-500">Nenhum usuário tem acesso a conta encontrado.</span>
+                                    }</>
+                            }
+                        </div>
+                    </div>
+                    <div className="col-12 md:col-6 lg:col-6 xl:col-4">
                         <div className="card mb-0">
                             <div className="flex justify-content-between mb-3">
                                 <div>
@@ -326,28 +366,28 @@ const HomePage = ({ changeMenuPerfil }) => {
                                             case '0':
                                             case 'agendado':
                                                 /** Agendado */
-                                                return <Button label="Agendado" icon="pi pi-search" type="button" className="p-button-text" />
+                                                return <Button label="Agendado" type="button" className="p-button-outlined" />
                                             case '1':
                                             case 'na_espera':
                                                 /** Na espera */
-                                                return <Button label="Na espera" icon="pi pi-search" type="button" className="p-button-text" />
+                                                return <Button label="Na espera" type="button" className="p-button-warning" />
                                             case '2':
                                             case 'em_realizacao':
                                                 /** Em realização */
-                                                return <Button label="Em realização" icon="pi pi-search" type="button" className="p-button-text" />
+                                                return <Button label="Em realização" type="button" className="p-button-secondary" />
                                             case '3':
                                             case 'realizado':
                                                 /** Realizado */
-                                                return <Button label="Realizado" icon="pi pi-search" type="button" className="p-button-text" />
+                                                return <Button label="Realizado" type="button" className="p-button-outlined p-button-success" />
                                             case '4':
                                             case 'nao_realizado':
                                                 /** Não realizado */
-                                                return <Button label="Não realizado" icon="pi pi-search" type="button" className="p-button-text" />
+                                                return <Button label="Não realizado" type="button" className="p-button-outlined p-button-danger" />
                                             case 'emergencia':
-                                                return <Button label="Chamado de Emergência" icon="" type="button" className="p-button-danger" />
+                                                return <Button label="Emergência" icon="" type="button" className="p-button-danger" />
                                             default:
                                                 /** Desconhecido */
-                                                return <Button label="Desconhecido" icon="pi pi-search" type="button" className="p-button-text" />
+                                                return <Button label="Desconhecido" type="button" className="p-button-text" />
                                         }
                                     }}
                                 />
@@ -366,11 +406,13 @@ const HomePage = ({ changeMenuPerfil }) => {
                     {(!loadingMetrics && metrics?.minhas_emergencias && metrics?.minhas_emergencias?.length &&
                         <div className="col-12">
                             <div className="grid">
-                            <h2 className="text-pink-700">Minhas Emergências</h2>
+                                <div className="col-12 mb-0">
+                                    <h2 className="text-pink-700 mb-0">Minhas Emergências</h2>
+                                </div>
                             {
                                 (
                                     metrics?.minhas_emergencias.map((emergencia) => {
-                                        return <EmergenciaCard emergencia={emergencia} key={emergencia.id}/>
+                                        return <EmergenciaCard emergencia={emergencia} key={emergencia.id} token={context.token}/>
                                     })
                                 ) || ( !loadingMetrics &&
                                     <h5>Você não possuí nenhuma emergência</h5>
@@ -379,7 +421,7 @@ const HomePage = ({ changeMenuPerfil }) => {
                             </div>
                         </div>
                     ) || null}
-                    {!loadingMetrics && metrics?.outras_emergencias && 
+                    {(!loadingMetrics && metrics?.outras_emergencias && metrics?.outras_emergencias?.length && 
                         <div className="col-12">
                             <div className="grid">
                                 <div className="col-12 mb-0">
@@ -388,7 +430,7 @@ const HomePage = ({ changeMenuPerfil }) => {
                             {
                                 (
                                     metrics?.outras_emergencias.map((emergencia) => {
-                                        return <EmergenciaCard emergencia={emergencia} key={emergencia.id}/>
+                                        return <EmergenciaCard emergencia={emergencia} key={emergencia.id} token={context.token}/>
                                     })
                                 ) || ( !loadingMetrics &&
                                     <h5>Não existe nenhuma emergência no estabelecimento.</h5>
@@ -396,8 +438,8 @@ const HomePage = ({ changeMenuPerfil }) => {
                             }
                             </div>
                         </div>
-                    }
-                    {!loadingMetrics && metrics?.agendamentos && 
+                    ) || null}
+                    {(!loadingMetrics && metrics?.agendamentos && metrics?.agendamentos?.length && 
                         <div className="col-12">
                             <div className="grid">
                                 <div className="col-12 mb-0">
@@ -413,7 +455,8 @@ const HomePage = ({ changeMenuPerfil }) => {
                             }
                             </div>
                         </div>
-                    }
+                    )||null}
+                    {/* {/* <DialogQuestionariosPaciente token={context.token} paciente_id={ } tipo={ } show={ } }); */}
                 </div>
                 )|| null   
             }
@@ -422,49 +465,41 @@ const HomePage = ({ changeMenuPerfil }) => {
             {
                 perfilSelected?.tipo === 'atendente' &&
                 <div className="grid">
-                    <div className="col-12 lg:col-6 xl:col-4">
-                        <div className="card mb-0 border-pink-200 hover:border-pink-300 border-3 border-round surface-overlay font-bold flex align-items-center bg-pink-100">
-                            <div className="flex justify-content-between mb-3 w-full">
-                                <div>
-                                    <p>
-                                        <span className="block text-500 text-4xl font-medium mb-3 text-lg text-pink-600">Emergência!</span>
-                                    </p>
-                                    <Button type="button" label="Nova Emergência" className="m-1 p-button-danger" icon="pi pi-star-fill" />
-                                </div>
-                                <div className="flex align-items-center justify-content-center bg-pink-100 border-round" style={{ width: "2.5rem", height: "2.5rem" }}>
-                                    <i className="pi pi-question-circle text-pink-600 text-xl" />
-                                </div>
-                            </div>
+                    <FormBuscaPaciente token={context.token} setPacienteEncontrado={setAtendenteFindedPaciente}/>
+                    <div className="col-12">
+                        <div className="card mb-0 border-indigo-200 hover:border-indigo-300 border-3 border-round surface-overlay font-bold block align-items-center bg-indigo-50">
+                            <h4 className="">Emergências :</h4>
+                            {(loadingMetrics && <h5 className="text-center">Carregando...</h5>) || null}
+                            {(!loadingMetrics && metrics?.emergencias && metrics?.emergencias?.length && 
+                                <TabelaAgendamentoAtendente token={context.token} service={atendenteService} agendamentos={metrics?.emergencias}/>
+                            ) || null}
                         </div>
                     </div>
-                    <div className="col-12 lg:col-6 xl:col-4">
-                        <div className="card mb-0 border-blue-200 hover:border-blue-300 border-3 border-round surface-overlay font-bold flex align-items-center bg-blue-100">
-                            <div className="flex justify-content-between mb-3 w-full">
-                                <div>
-                                <p>
-                                    <span className="block text-500 text-4xl font-medium mb-3 text-lg text-blue-600">Questionário de Emergência!</span>
-                                </p>
-                                    <Button type="button" label="Novo Questionário" className="m-1" icon="pi pi-star-fill" />
-                                </div>
-                                <div className="flex align-items-center justify-content-center bg-blue-100 border-round" style={{ width: "2.5rem", height: "2.5rem" }}>
-                                    <i className="pi pi-question-circle text-blue-600 text-xl" />
-                                </div>
-                            </div>
+                    <div className="col-12">
+                        <div className="card mb-0 border-indigo-200 hover:border-indigo-300 border-3 border-round surface-overlay font-bold block align-items-center bg-indigo-50">
+                            <h4 className="">Agendamentos :</h4>
+                            {(loadingMetrics && <h5 className="text-center">Carregando...</h5>) || null}
+                            {(!loadingMetrics && metrics?.agendamentos && metrics?.agendamentos?.length && 
+                                <TabelaAgendamentoAtendente token={context.token} service={atendenteService} agendamentos={metrics?.agendamentos}/>
+                            ) || null}
                         </div>
                     </div>
-                    <div className="col-12 lg:col-6 xl:col-4">
-                        <div className="card mb-0 border-indigo-200 hover:border-indigo-300 border-3 border-round surface-overlay font-bold flex align-items-center bg-indigo-100">
-                            <div className="flex justify-content-between mb-3 w-full">
-                                <div>
-                                <p>
-                                    <span className="block text-500 text-4xl font-medium mb-3 text-lg text-indigo-600">Agendar Consulta</span>
-                                </p>
-                                    <Button type="button" label="Nova Consulta" className="m-1" icon="pi pi-star-fill" />
-                                </div>
-                                <div className="flex align-items-center justify-content-center bg-indigo-100 border-round" style={{ width: "2.5rem", height: "2.5rem" }}>
-                                    <i className="pi pi-question-circle text-indigo-600 text-xl" />
-                                </div>
-                            </div>
+                    <div className="col-12">
+                        <div className="card mb-0 border-indigo-200 hover:border-indigo-300 border-3 border-round surface-overlay font-bold block align-items-center bg-indigo-50">
+                            <h4 className="">Paciente na Espera :</h4>
+                            {(loadingMetrics && <h5 className="text-center">Carregando...</h5>) || null}
+                            {(!loadingMetrics && metrics?.paciente_na_espera && metrics?.paciente_na_espera?.length && 
+                                <TabelaAgendamentoAtendente token={context.token} service={atendenteService} agendamentos={metrics?.paciente_na_espera}/>
+                            ) || null}
+                        </div>
+                    </div>
+                    <div className="col-12">
+                        <div className="card mb-0 border-indigo-200 hover:border-indigo-300 border-3 border-round surface-overlay font-bold block align-items-center bg-indigo-50">
+                            <h4 className="">Pacientes em Procedimento :</h4>
+                            {(loadingMetrics && <h5 className="text-center">Carregando...</h5>) || null}
+                            {(!loadingMetrics && metrics?.paciente_em_procedimento && metrics?.paciente_em_procedimento?.length && 
+                                <TabelaAgendamentoAtendente token={context.token} service={atendenteService} agendamentos={metrics?.paciente_em_procedimento}/>
+                            ) || null}
                         </div>
                     </div>
                 </div>

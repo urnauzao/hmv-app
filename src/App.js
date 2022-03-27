@@ -33,7 +33,7 @@ const App = () => {
     const [layoutColorMode, setLayoutColorMode] = useState('light')
     const [inputStyle, setInputStyle] = useState('outlined');
     const [ripple, setRipple] = useState(true);
-    const [staticMenuInactive, setStaticMenuInactive] = useState(false);
+    const [staticMenuInactive, setStaticMenuInactive] = useState(true);
     const [overlayMenuActive, setOverlayMenuActive] = useState(false);
     const [mobileMenuActive, setMobileMenuActive] = useState(false);
     const [mobileTopbarMenuActive, setMobileTopbarMenuActive] = useState(false);
@@ -147,6 +147,9 @@ const App = () => {
         switch (tipo) {
             case 'medico':
                 setMenu(TipoMenuService.menuMedico);
+                break;
+            case 'atendente':
+                setMenu(TipoMenuService.menuAtendente);
                 break;
             default:
                 setMenu(TipoMenuService.menuPaciente);
@@ -270,7 +273,13 @@ const useProvideAuth = () => {
         let user = await loginService.getMe(getToken());
         if (fnIsLoged()) {
             setUser(user);
-            setPerilSelected(user?.perfis?.find((x) => { return x?.tipo === 'paciente'} ));
+            setPerilSelected(user?.perfis?.find((x) => {
+                if (perfilSelected && perfilSelected?.tipo) { 
+                    return x?.tipo === perfilSelected.tipo
+                } else {
+                    return x?.tipo === 'paciente'
+                }
+            }));
             setToken(newToken);
             setIsLoged(true);
             console.log('está logado', isLoged);

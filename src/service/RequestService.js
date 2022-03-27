@@ -16,11 +16,11 @@ export class RequestService {
         return axios.get(url, this.config)
     }
 
-    post = (url, data) => { 
+    post = (url, data = {}) => { 
         return axios.post(url, data, this.config)
     }
 
-    put = (url, data) => {
+    put = (url, data = {}) => {
         return axios.put(url, data, this.config)
     }
 
