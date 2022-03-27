@@ -126,7 +126,6 @@ const LoginPage = ({ props }) => {
                 }
             }
         }
-        return;
         service.register(newUser).then((result) => { 
             if (!result) { 
                 setLoadingRegister(false);
