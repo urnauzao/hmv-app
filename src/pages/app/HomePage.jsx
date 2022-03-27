@@ -165,8 +165,8 @@ const HomePage = ({ changeMenuPerfil }) => {
                 }
                 setDisplayDialogEndereco(true);
             }
+            setLoadingEnderecos(false);
         });
-        setLoadingEnderecos(false);
 
     }
     const btnDialogChamadoEmergencia = <Button type="button" loading={loadingEnderecos} className="p-button" label="Chamar Agora!" onClick={fnChamarEmergencia} />
