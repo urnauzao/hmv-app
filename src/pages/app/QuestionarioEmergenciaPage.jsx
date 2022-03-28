@@ -61,8 +61,8 @@ const QuestionarioEmergenciaPage = () => {
         }
         service.postNewQuestionario(context.token, context.perfilSelected.id, { ...respostas })
             .then((result) => {
-                if (result?.success) {
-                    setMsgRetornoAcao(result?.msg);
+                if (result?.status) {
+                    setMsgRetornoAcao(result?.mensagem);
                     setShowDialog(true);
                     setSendingLoading(false)
                 } else {
@@ -71,11 +71,11 @@ const QuestionarioEmergenciaPage = () => {
                         {
                             severity: 'error',
                             summary: 'Ocorreu um erro ao realizar a ação!',
-                            detail: result?.msg || "Erro desconhecido!",
+                            detail: result?.mensagem || "Erro desconhecido!",
                             life: 5000
                         }
                     );
-                    setMsgRetornoAcao(result?.msg);
+                    setMsgRetornoAcao(result?.mensagem);
                     setSendingLoading(false)
                 }
                 

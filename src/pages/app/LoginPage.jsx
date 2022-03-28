@@ -31,7 +31,13 @@ const LoginPage = ({ props }) => {
 
     const login = () => {
         setLoadingLogin(true);
-        context.signin(usuario, senha, navigator.userAgent);
+        context.signin(usuario, senha, navigator.userAgent).then((x) => {
+            console.log(x);
+            if (x && x?.status === false) {
+                toast.current.show({ severity: 'error', summary: 'Não foi possível realizar o login!', detail: x?.mensagem||"-", life: 7000 });
+            }
+            setLoadingLogin(false);
+        });
     };
 
     useEffect(() => {
@@ -206,7 +212,7 @@ const LoginPage = ({ props }) => {
                     <div className="flex align-items-center flex-wrap">
                         <Chip label="Sou novo por aqui!" className="mr-2 mb-2 bg-purple-300 text-4xl text-white" />
                     </div>
-                    <p>Crie você um usuário agora mesmo um usuário e comece a agendar suas consultas em qualque hospital da rede HMV.
+                    <p>Crie você um usuário agora mesmo e comece a agendar suas consultas em qualque hospital da rede HMV.
                         Para criar seu usuário clique no botão abaixo em "Quero me registrar" e então informe todos os dados solicitados.
                         Depois de criado, você já pode acessar seu portal de paciente e com isso conseguir visulizar suas consultas ou solicitar uma emergência.
                     </p>

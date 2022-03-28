@@ -18,9 +18,8 @@ class LoginService {
                 this.setLogin(result);
                 return result;
             })
-            .catch((err) => {
-                    console.log({ success: false, ...err.response.data });
-                    return null;
+            .catch(({response}) => {
+                return response;
             });
     }
     async getMe(token)  { 
