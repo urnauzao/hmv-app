@@ -30,12 +30,14 @@ class LoginService {
             .then(result => { 
                 console.log("result", result)
                 setUsersMe(result);
-                setUserPerfilSelected(result.perfis[0])
+                if (result?.perfis[0]) {
+                    setUserPerfilSelected(result?.perfis[0])
+                }
                 return result;
             })
             .catch(
-                (err) => {
-                    console.log(err);
+                ({response}) => {
+                    console.log({response});
                     // console.log({ success: false, ...err.response?.data || err.response });
                     return null;
                 }
