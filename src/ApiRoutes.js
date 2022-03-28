@@ -16,8 +16,8 @@ const ApiRoutes = {
         'POST_NEW_QUESTIONARIO': '/v1/questionarios-emergencia/perfil'  
     },
     'HABITO_SAUDE': {
-        'GET_NEW_HABITO': '/v1/habito-saude',  
-        'POST_NEW_HABITO': '/v1/habito-saude'  
+        'GET_NEW_HABITO': '/v1/habitos-saude',  
+        'POST_NEW_HABITO': '/v1/habitos-saude'  
     },
     'ENDERECO': {
         'GET_ALL_MY': '/v1/enderecos' 
