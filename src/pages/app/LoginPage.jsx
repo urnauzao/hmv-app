@@ -176,14 +176,14 @@ const LoginPage = ({ props }) => {
                                 <span className="p-inputgroup-addon">
                                     <i className="pi pi-user"></i>
                                 </span>
-                                <InputText placeholder="E-mail de usuário"disabled={loadingLogin} onChange={(e) => setUsuario(e.target.value)} />
+                                <InputText name="email" placeholder="E-mail de usuário"disabled={loadingLogin} onChange={(e) => setUsuario(e.target.value)} />
                             </div>
                             <h5 className="text-secondary">Digite sua senha:</h5>
                             <div className="p-inputgroup mt-3">
                                 <span className="p-inputgroup-addon">
                                     <i className="pi pi-key"></i>
                                 </span>
-                                <Password placeholder="Senha de acesso" disabled={loadingLogin} onChange={(e) => setSenha(e.target.value)} feedback={false} />
+                                <Password name="password" placeholder="Senha de acesso" disabled={loadingLogin} onChange={(e) => setSenha(e.target.value)} feedback={false} />
                             </div>
                         </div>
                     </div>
