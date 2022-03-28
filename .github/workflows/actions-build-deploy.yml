@@ -1,7 +1,8 @@
 name: Build React & Deploy S3
 on:
   push:
-
+    branches:
+      - master
 jobs:
   build:
     uses: Vis-Rodrigues/workflow-template/.github/workflows/react-build-action.yml@v1

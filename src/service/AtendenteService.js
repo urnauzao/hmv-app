@@ -57,7 +57,7 @@ export default class AtendenteService {
     }
 
     async putAgendamentoSituacao(token, agendamento_id, situacao_id) {
-        const url = ApiRoutes['API_URL'] + ApiRoutes['ATENDENTE']['PUT_AGENDAMENTO_SIT'] + '/' + agendamento_id + '/' + situacao_id;
+        const url = ApiRoutes['API_URL'] + ApiRoutes['ATENDENTE']['PUT_AGENDAMENTO_SIT'].replace("{agendamento_id}", agendamento_id).replace("{situacao_id}", situacao_id);
         this.reqService.setAuth(token);
         return this.reqService.put(url)
             .then(res => res.data)
@@ -74,7 +74,7 @@ export default class AtendenteService {
     }
     
     async getAgendamentoDifinirMedico(token, agendamento_id, medico_id) {
-        const url = ApiRoutes['API_URL'] + ApiRoutes['ATENDENTE']['GET_AGENDAMENTO_DEFINIR_MEDICO'] + '/' + agendamento_id + '/' + medico_id;
+        const url = ApiRoutes['API_URL'] + ApiRoutes['ATENDENTE']['GET_AGENDAMENTO_DEFINIR_MEDICO'].replace("{agendamento_id}", agendamento_id).replace("{medico_id}", medico_id) + '/' + agendamento_id + '/' + medico_id;
         this.reqService.setAuth(token);
         return this.reqService.get(url)
             .then(res => res.data)
@@ -91,7 +91,7 @@ export default class AtendenteService {
     }
 
     async getEstabelecimentosParaAgendamento(token, paciente_id) {
-        const url = ApiRoutes['API_URL'] + ApiRoutes['ATENDENTE']['GET_AGENDAMENTO_ESTABELECIMENTOS'] + '/' + paciente_id;
+        const url = ApiRoutes['API_URL'] + ApiRoutes['ATENDENTE']['GET_AGENDAMENTO_ESTABELECIMENTOS'].replace("{paciente_id}", paciente_id);
         this.reqService.setAuth(token);
         return this.reqService.get(url)
             .then(res => res.data)
