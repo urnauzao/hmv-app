@@ -31,7 +31,7 @@ const ApiRoutes = {
     },
     'ATENDENTE': {
         'GET_METRICS': '/v1/metricas/atendentes',                                                               
-        'POST_AGENDAMENTO_NEW': '/v1/agendamentos/atendentes/',                                        
+        'POST_AGENDAMENTO_NEW': '/v1/agendamentos/atendentes',                                        
         'PUT_AGENDAMENTO_SIT': '/v1/agendamentos/atendentes/{agendamento_id}/status/{situacao_id}',                  
         'GET_AGENDAMENTO_DEFINIR_MEDICO': '/v1/agendamentos/{agendamento_id}/medicos/{medico_id}',     
         'GET_AGENDAMENTO_ESTABELECIMENTOS': '/v1/agendamentos/pacientes/{paciente_id}/estabelecimentos/enderecos', 
