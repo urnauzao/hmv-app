@@ -1,5 +1,4 @@
 const ApiRoutes = {
-    
     'APP_URL': 'https://d1vg0iaktfp68d.cloudfront.net',
     'API_URL': 'https://d1vg0iaktfp68d.cloudfront.net/fiap-hmv',
     'LOGIN': {
@@ -37,7 +36,6 @@ const ApiRoutes = {
         'GET_AGENDAMENTO_ESTABELECIMENTOS': '/v1/agendamentos/pacientes/{paciente_id}/estabelecimentos/enderecos', 
         'POST_PACIENTE_BUSCAR': '/v1/pacientes/busca'
     }
-
 };
 
 export default ApiRoutes;
