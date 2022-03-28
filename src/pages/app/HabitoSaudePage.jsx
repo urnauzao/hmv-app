@@ -73,8 +73,8 @@ const HabitoSaudePage = () => {
                     return;
                 }
 
-                if (result?.success) {
-                    setMsgRetornoAcao(result?.msg);
+                if (result?.status) {
+                    setMsgRetornoAcao(result?.mensagem);
                     setShowDialog(true);
                     setSendingLoading(false)
                 } else {
@@ -83,11 +83,11 @@ const HabitoSaudePage = () => {
                         {
                             severity: 'error',
                             summary: 'Ocorreu um erro ao realizar a ação!',
-                            detail: result?.msg || "Erro desconhecido!",
+                            detail: result?.mensagem || "Erro desconhecido!",
                             life: 5000
                         }
                     );
-                    setMsgRetornoAcao(result?.msg);
+                    setMsgRetornoAcao(result?.mensagem);
                     setSendingLoading(false)
                 }
                 

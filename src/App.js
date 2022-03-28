@@ -266,10 +266,12 @@ const useProvideAuth = () => {
     const [isLoged, setIsLoged] = useState(fnIsLoged());
     const history = useNavigate();
 
-    console.log("useProvideAuth", user, isLoged);
     const signin = async (email, senha, device_name, cb) => {
         let loginService = new LoginService();
         let newToken = await loginService.postLogin(email, senha, device_name);
+        if (newToken && newToken?.data && newToken.data?.status === false) { 
+            return newToken.data;
+        }
         let user = await loginService.getMe(getToken());
         if (fnIsLoged()) {
             setUser(user);
@@ -282,7 +284,6 @@ const useProvideAuth = () => {
             }));
             setToken(newToken);
             setIsLoged(true);
-            console.log('está logado', isLoged);
             history("/", true);
         }
     };
