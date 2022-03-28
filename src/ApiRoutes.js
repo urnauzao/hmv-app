@@ -23,7 +23,7 @@ const ApiRoutes = {
         'GET_ALL_MY': '/v1/enderecos' 
     },
     'MEDICO': {
-        'GET_METRICS': '/v1/metricas/medicos/',                                        
+        'GET_METRICS': '/v1/metricas/medicos',                                        
         'GET_QUEST_EMERG_PACIENTE': '/v1/questionarios-emergencia/medico',             
         'GET_HABITO_SAUDE_PACIENTE': '/v1/habitos-saude/medicos',                     
         'GET_HISTORICO_PACIENTE': '/v1/atendimentos/historicos/pacientes',   
