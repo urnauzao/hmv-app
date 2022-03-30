@@ -1,0 +1,842 @@
+{
+	"info": {
+		"_postman_id": "89b45308-4b81-46c8-83c6-b7d43cd242ca",
+		"name": "FIAP | HMV | Projeto Final MBA 2022",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Usuario",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"quintana.lucio@example.com\",\r\n    \"password\":\"password\",\r\n    \"device_name\":\"urnau_mobile\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/sanctum/token",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"sanctum",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Dados",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/usuario/dados",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"usuario",
+								"dados"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registrar Usuário",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"julio3@teste.com.br\",\r\n    \"password\":\"julio\",\r\n    \"doc_tipo\":\"cpf\",\r\n    \"doc_numero\":\"012.000.199-00\",\r\n    \"foto\":\"https://i.pinimg.com/474x/76/b2/79/76b2799fcd3c8b77e6e0e83a98af8657.jpg\",\r\n    \"nome\":\"Julio Carlos Silveira\",\r\n    \"endereco\": {\r\n        \"nome\":\"Casa\",\r\n        \"tipo\": \"Rua\",\r\n        \"logradouro\": \"Sergio Alipo\",\r\n        \"cep\": \"20102-314\",\r\n        \"numero\": \"1020\",\r\n        \"cidade\": \"São Paulo\",\r\n        \"estado\": \"SP\",\r\n        \"complemento\": \"esquina taubaté\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Paciente",
+			"item": [
+				{
+					"name": "Métricas do Usuário",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/paciente/metricas/45",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"paciente",
+								"metricas",
+								"45"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Abrir Chamado de Emergência",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"98\", \"Opera\";v=\"84\""
+							},
+							{
+								"key": "Accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 123|VVH8iQ4qFCuUO7qSAKXqELnq9xGsfGJxNsdcFlFz"
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.109 Safari/537.36 OPR/84.0.4316.42"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "Origin",
+								"value": "http://localhost:3000"
+							},
+							{
+								"key": "Sec-Fetch-Site",
+								"value": "same-site"
+							},
+							{
+								"key": "Sec-Fetch-Mode",
+								"value": "cors"
+							},
+							{
+								"key": "Sec-Fetch-Dest",
+								"value": "empty"
+							},
+							{
+								"key": "Referer",
+								"value": "http://localhost:3000/"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en-US,en;q=0.9,pt-BR;q=0.8,pt;q=0.7"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"id\":51,\"nome\":\"Corona Ltda.\",\"tipo\":\"rua\",\"logradouro\":\"Rua Camilo\",\"cep\":\"66085-767\",\"numero\":\"21872\",\"cidade\":\"Eduardo do Norte\",\"estado\":\"MA\",\"pais\":\"Brasil\",\"complemento\":null,\"deleted_at\":null,\"created_at\":\"2022-02-21T02:08:32.000000Z\",\"updated_at\":\"2022-02-21T02:08:32.000000Z\",\"name\":\"Corona Ltda. | Rua Camilo, 21872\",\"code\":51}"
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/paciente/chamado_emergencia/19",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"paciente",
+								"chamado_emergencia",
+								"19"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Questionários de Emergência",
+			"item": [
+				{
+					"name": "Novo Questionário",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/questionario_emergencia/novo/45",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"questionario_emergencia",
+								"novo",
+								"45"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Salvar Questionário",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"1\":\"sim\",\r\n    \"2\":\"não\",\r\n    \"3\":\"sim\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/questionario_emergencia/novo/45",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"questionario_emergencia",
+								"novo",
+								"45"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Hábitos de Saúde",
+			"item": [
+				{
+					"name": "Novo Hábito",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/habito_saude/novo/45",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"habito_saude",
+								"novo",
+								"45"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Salvar Hábito",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"1\":\"sim\",\r\n    \"2\":\"não\",\r\n    \"3\":\"sim\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/habito_saude/novo/45",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"habito_saude",
+								"novo",
+								"45"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Endereço",
+			"item": [
+				{
+					"name": "Meus Enderecos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/endereco/meus",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"endereco",
+								"meus"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Médico",
+			"item": [
+				{
+					"name": "Métricas do Médico",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{medico_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/medico/metricas/{{medico_perfil}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"medico",
+								"metricas",
+								"{{medico_perfil}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ver Questionário de Emergencia",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{medico_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/medico/questionario_emergencia/{{medico_paciente_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"medico",
+								"questionario_emergencia",
+								"{{medico_paciente_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ver Habitos de Saúde",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{medico_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/medico/habito_saude/{{medico_paciente_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"medico",
+								"habito_saude",
+								"{{medico_paciente_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ver Histórico de Atendimentos do Paciente",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{medico_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/medico/historico/{{medico_paciente_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"medico",
+								"historico",
+								"{{medico_paciente_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Relatório de Atendimento",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{medico_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"relatorio\": \"Foi feito exame de urina para averiguar se o paciente pode estar com pedra no rim.\",\r\n    \"agendamento_id\": 68\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/medico/relatorio_atendimento/{{medico_paciente_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"medico",
+								"relatorio_atendimento",
+								"{{medico_paciente_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Atendente",
+			"item": [
+				{
+					"name": "Métricas do Atendente",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{atendente_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/atendente/metricas",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"atendente",
+								"metricas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Agendamento Definir Medico",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{atendente_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/atendente/agendamento/definir_medico/{{atendente_agendamento_id}}/{{atendente_medico_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"atendente",
+								"agendamento",
+								"definir_medico",
+								"{{atendente_agendamento_id}}",
+								"{{atendente_medico_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Novo Agendamento",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{atendente_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\": \"2022-04-01\",\r\n    \"observacoes\": \"Retorno de outro atendimento.\",\r\n    \"estabelecimento_id\" : \"{{atendente_estabelecimento_id}}\",\r\n    \"exame\" : \"Retorno - Ultrassom\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/atendente/agendamento/novo/{{atendente_paciente_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"atendente",
+								"agendamento",
+								"novo",
+								"{{atendente_paciente_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Agendamento Alterar Situação",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{atendente_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/atendente/agendamento/situacao/{{atendente_agendamento_id}}/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"atendente",
+								"agendamento",
+								"situacao",
+								"{{atendente_agendamento_id}}",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Estabelecimentos Permitidos para Agendamento",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{atendente_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/atendente/agendamento/estabelecimentos/{{atendente_paciente_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"atendente",
+								"agendamento",
+								"estabelecimentos",
+								"{{atendente_paciente_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar paciente pelo documento",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{atendente_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"doc_tipo\" : \"cnpj\",\r\n    \"doc_numero\": \"41.159.141/0001-39\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/atendente/paciente/busca",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"atendente",
+								"paciente",
+								"busca"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://127.0.0.1:8000"
+		},
+		{
+			"key": "token",
+			"value": "91|Zq5kCihZAWQNHf5vFP7NMsy5v3sxWkaN3HA8cjLL"
+		},
+		{
+			"key": "medico_token",
+			"value": "125|LbAgDtQx04QKtbqKl8TRvYFfuZi5zQrfsn1gMi2q"
+		},
+		{
+			"key": "medico_perfil",
+			"value": "12"
+		},
+		{
+			"key": "medico_paciente_id",
+			"value": "19"
+		},
+		{
+			"key": "atendente_token",
+			"value": "216|KNy2k7EQFyFUs8XJm0MtuK223TKJUAHan0qBMhuk"
+		},
+		{
+			"key": "atendente_perfil",
+			"value": "48"
+		},
+		{
+			"key": "atendente_paciente_id",
+			"value": "19"
+		},
+		{
+			"key": "atendente_agendamento_id",
+			"value": "68"
+		},
+		{
+			"key": "atendente_medico_id",
+			"value": "38"
+		},
+		{
+			"key": "atendente_estabelecimento_id",
+			"value": "1"
+		}
+	]
+}
