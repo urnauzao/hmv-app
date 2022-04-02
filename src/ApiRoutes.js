@@ -8,7 +8,7 @@ const ApiRoutes = {
     },
     'PACIENTE': {
         'GET_METRICS': '/v1/metricas/pacientes',                       
-        'POST_CHAMADO_EMERGENCIA': '/v1/pacientes/chamados_emergencia' 
+        'POST_CHAMADO_EMERGENCIA': '/v1/paciente/chamado_emergencia' 
     },
     'QUESTIONARIO_EMERGENCIA': {
         'GET_NEW_QUESTIONARIO': '/v1/questionarios-emergencia/perfil',  
