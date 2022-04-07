@@ -530,7 +530,7 @@ const HomePage = ({ changeMenuPerfil }) => {
             {/* ADMIN */}
             {(perfilSelected?.tipo === 'admin' &&
                 <><h2 className="text-indigo-600">Métricas de BI</h2>
-                <iframe title="HMV - Dashboard - Questionário de Emergência" width="100%" height="800" src="https://app.powerbi.com/view?r=eyJrIjoiOGE3ZTZmNDEtYjUxMS00ZjkzLTkzMmEtYzU0YTViM2U1MzhiIiwidCI6ImJjOThlYTcyLTdjYzAtNDI4OC1hODI1LTUyMDNiZDdmYTI5YSJ9" frameborder="0" allowFullScreen="true"></iframe>
+                <iframe title="HMV - Dashboard" width="1140" height="541.25" src="https://app.powerbi.com/reportEmbed?reportId=fda3788d-2f30-4444-a49b-e698e8032fe2&autoAuth=true&ctid=bc98ea72-7cc0-4288-a825-5203bd7fa29a&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLWJyYXppbC1zb3V0aC1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldC8ifQ%3D%3D" frameborder="0" allowFullScreen="true"></iframe>
                 </>
             ) || null
             }
