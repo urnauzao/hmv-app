@@ -1,7 +1,7 @@
 export const TipoMenuService = {
     menuMedico: [
         {
-            label: 'Connect HMV | Médico',
+            label: 'Saluti | Médico',
             items: [
                 {
                     label: 'Início', icon: 'pi pi-fw pi-home', to: '/'
@@ -11,7 +11,7 @@ export const TipoMenuService = {
     ],
     menuAtendente: [
         {
-            label: 'Connect HMV | Atendente',
+            label: 'Saluti | Atendente',
             items: [
                 {
                     label: 'Início', icon: 'pi pi-fw pi-home', to: '/'
@@ -21,7 +21,7 @@ export const TipoMenuService = {
     ],
     menuPaciente: [
         {
-            label: 'Connect HMV',
+            label: 'Saluti',
             items: [
                 {
                     label: 'Início', icon: 'pi pi-fw pi-home', to: '/'

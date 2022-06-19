@@ -149,11 +149,11 @@ const LoginPage = ({ props }) => {
             <Toast ref={toast} />
             <div className="col-12">
                 <div className="card text-center">
-                    <h2 className="text-center text-blue-700">Connect HMV</h2>
-                    <Link title="Acessar página inicial do HMV!" to="https://www.hospitalmoinhos.org.br/" className="px-2">
-                        <Image width="200" className="text-center w-2rem" src="/images/hmv/logo.png" alt="Connect HMV" />
+                    {/* <h2 className="text-center text-blue-700">Saluti</h2> */}
+                    <Link title="Acessar página inicial do Saluti!" to="/" className="px-2">
+                        <Image width="200" className="text-center w-2rem" src="/images/saluti/logo.png" alt="Saluti" />
                     </Link>
-                    <div>
+                    {/* <div>
                         <Link title="Acessar YouTube do HMV!" to="https://www.youtube.com/user/HospitalMoinhos" className="px-2">
                             <i className="pi pi-youtube text-blue-800 text-5xl"/>
                         </Link>
@@ -166,7 +166,7 @@ const LoginPage = ({ props }) => {
                         <Link title="Acessar Linkedin do HMV" to="https://www.linkedin.com/company/hospital-moinhos-de-vento/" className="px-2">
                             <i className="pi pi-linkedin text-blue-800 text-5xl"/>
                         </Link>
-                    </div>
+                    </div> */}
                 </div>
             </div>
 
